@@ -1,9 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-
-import { Hello } from "./components/Hello";
+import {HRSystem} from "./components/HRSystem/HRSystem";
 
 ReactDOM.render(
-    <Hello compiler="TypeScript" framework="React" />,
+    <HRSystem />,
     document.getElementById("example")
 );
