@@ -23,6 +23,7 @@ namespace HRSystem.Web
             }
 
             app.UseStaticFiles();
+            
             app.UseMvc(routeBuilder =>
             {
                 routeBuilder.MapRoute(

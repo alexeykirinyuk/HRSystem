@@ -1,0 +1,12 @@
+{
+  "name": "hr-system",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "webpack": "webpack"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "0.1.19",
+    "webpack": "4.8.0"
+  }
+}
