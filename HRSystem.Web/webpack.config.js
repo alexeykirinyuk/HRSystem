@@ -1,8 +1,8 @@
 module.exports = {
     entry: "./ClientApp/index.tsx",
     output: {
-        filename: "wwwroot/bundle/script.js",
-        path: __dirname + "/dist"
+        filename: "script.js",
+        path: __dirname + "/wwwroot/bundle"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -30,5 +30,5 @@ module.exports = {
     externals: {
         "react": "React",
         "react-dom": "ReactDOM"
-    },
+    }
 };
