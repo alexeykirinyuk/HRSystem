@@ -7,14 +7,27 @@
     const bundleFolder = "wwwroot/bundle/";
 
     module.exports = {
-        entry: "./ClientApp/main.js",
+        entry: "./ClientApp/main.ts",
 
         output: {
             filename: 'script.js',
             path: path.resolve(__dirname, bundleFolder)
         },
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    loader: "ts-loader",
+                    exclude: /node_modules/,
+                },
+            ]
+        },
+        resolve: {
+            extensions: [".tsx", ".ts", ".js"]
+        },
         plugins: [
             new CleanWebpackPlugin([bundleFolder])
-        ]
+        ],
+        devtool: "inline-source-map"
     };
 }
