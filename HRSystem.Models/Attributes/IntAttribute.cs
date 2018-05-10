@@ -1,14 +1,18 @@
-﻿namespace HRSystem.Models.Attributes
-{
-    public sealed class IntAttribute : AttributeBase
-    {
-        public int Value { get; set; }
+﻿using System;
+using HRSystem.Common;
 
-        public IntAttribute()
+namespace HRSystem.Models.Attributes
+{
+    public class IntAttribute : AttributeBase
+    {
+        public int? Value { get; set; }
+
+        [Obsolete(ErrorStrings.ForBindersOnly, true)]
+        private IntAttribute()
         {
         }
 
-        public IntAttribute(string name, int value) : base(name, AttributeType.Int)
+        public IntAttribute(string name, int? value) : base(name, AttributeType.Int)
         {
             Value = value;
         }

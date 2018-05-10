@@ -1,10 +1,14 @@
-﻿namespace HRSystem.Models.Attributes
+﻿using System;
+using HRSystem.Common;
+
+namespace HRSystem.Models.Attributes
 {
-    public sealed class StringAttribute : AttributeBase
+    public class StringAttribute : AttributeBase
     {
         public string Value { get; set; }
 
-        public StringAttribute()
+        [Obsolete(ErrorStrings.ForBindersOnly, true)]
+        private StringAttribute()
         {
         }
 

@@ -1,12 +1,14 @@
 ﻿using System;
+using HRSystem.Common;
 
 namespace HRSystem.Models.Attributes
 {
-    public sealed class DateTimeAttribute : AttributeBase
+    public class DateTimeAttribute : AttributeBase
     {
         public DateTime? Value { get; set; }
         
-        public DateTimeAttribute()
+        [Obsolete(ErrorStrings.ForBindersOnly, true)]
+        private DateTimeAttribute()
         {
         }
 

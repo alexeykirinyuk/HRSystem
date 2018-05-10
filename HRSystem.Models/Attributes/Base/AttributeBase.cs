@@ -6,22 +6,26 @@ namespace HRSystem.Models
     {
         public int Id { get; set; }
         
-        public int EmployeeId { get; set; }
+        public string EmployeeLogin { get; set; }
+        
+        public Employee Employee { get; set; }
 
         public string Name { get; set; }
 
-        public AttributeType AttributeType { get; set; }
+        public AttributeType Type { get; set; }
+        
+        public bool IsActiveDirectoryAttribute { get; set; }
 
         public AttributeBase()
         {
         }
 
-        public AttributeBase(string name, AttributeType attributeType)
+        public AttributeBase(string name, AttributeType type)
         {
             ArgumentValidator.EnsureNotNullOrEmpty(nameof(name), name);
 
             Name = name;
-            AttributeType = attributeType;
+            Type = type;
         }
     }
 }

@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Common", "HRSystem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.CQRS", "HRSystem.CQRS\HRSystem.CQRS.csproj", "{B9C7BDE5-F9DC-4664-8498-6FCD4B1A6F7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Dal", "HRSystem.Dal\HRSystem.Dal.csproj", "{2AE0A9FC-B803-40D7-A1A5-1D731A25475A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{B9C7BDE5-F9DC-4664-8498-6FCD4B1A6F7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C7BDE5-F9DC-4664-8498-6FCD4B1A6F7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C7BDE5-F9DC-4664-8498-6FCD4B1A6F7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE0A9FC-B803-40D7-A1A5-1D731A25475A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE0A9FC-B803-40D7-A1A5-1D731A25475A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE0A9FC-B803-40D7-A1A5-1D731A25475A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE0A9FC-B803-40D7-A1A5-1D731A25475A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

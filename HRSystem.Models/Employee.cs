@@ -1,13 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using HRSystem.Common;
+using HRSystem.Common.Errors;
 
 namespace HRSystem.Models
 {
-    public sealed class Employee
+    public class Employee
     {
-        public int Id { get; set; }
-        
         public string Login { get; set; }
 
-        public ICollection<AttributeBase> Attributes;
+        public virtual List<AttributeBase> Attributes { get; set; }
+
+        [Obsolete(ErrorStrings.ForBindersOnly, true)]
+        private Employee()
+        {
+        }
+
+        public Employee(string login)
+        {
+            ArgumentValidator.EnsureNotNullOrEmpty(nameof(login), login);
+
+            Login = login;
+        }
     }
 }
