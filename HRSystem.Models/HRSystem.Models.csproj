@@ -38,7 +38,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Base\AttributeBase.cs" />
+    <Compile Include="Attributes\Base\AttributeType.cs" />
+    <Compile Include="Attributes\DateTimeAttribute.cs" />
+    <Compile Include="Attributes\Extensions\AttributeBaseAsExtensions.cs" />
+    <Compile Include="Attributes\Extensions\AttributeBaseIsExtensions.cs" />
+    <Compile Include="Attributes\IntAttribute.cs" />
+    <Compile Include="Attributes\StringAttribute.cs" />
+    <Compile Include="Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj">
+      <Project>{6139ed7a-36e4-4265-b56e-aca8308d38eb}</Project>
+      <Name>HRSystem.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
