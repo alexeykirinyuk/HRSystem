@@ -33,12 +33,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Implementations\CommandDispatcher.cs" />
+    <Compile Include="Infrastructure\Implementations\CommandHandlerBase.cs" />
+    <Compile Include="Infrastructure\Implementations\QueryDispatcher.cs" />
+    <Compile Include="Infrastructure\Implementations\QueryHandlerBase.cs" />
+    <Compile Include="Infrastructure\Interfaces\IAsyncQueryHandler.cs" />
+    <Compile Include="Infrastructure\Interfaces\ICommandDefinition.cs" />
+    <Compile Include="Infrastructure\Interfaces\ICommandDispatcher.cs" />
+    <Compile Include="Infrastructure\Interfaces\ICommandHandler.cs" />
+    <Compile Include="Infrastructure\Interfaces\IHandlerProvider.cs" />
+    <Compile Include="Infrastructure\Interfaces\IQueryDefinition.cs" />
+    <Compile Include="Infrastructure\Interfaces\IQueryDispatcher.cs" />
+    <Compile Include="Infrastructure\Interfaces\IQueryHandler.cs" />
+    <Compile Include="Infrastructure\Validation\DataAnnotationsValidator.cs" />
+    <Compile Include="Infrastructure\Validation\SkipRecursiveValidationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj">
+      <Project>{6139ed7a-36e4-4265-b56e-aca8308d38eb}</Project>
+      <Name>HRSystem.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
