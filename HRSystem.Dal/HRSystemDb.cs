@@ -11,6 +11,6 @@ namespace HRSystem.Dal
         
         public DbSet<Employee> Employees { get; set; }
         
-        public DbSet<AttributeBase> AttributeBases { get; set; }
+        public DbSet<AttributeBase> Attributes { get; set; }
     }
 }

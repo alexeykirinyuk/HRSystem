@@ -8,16 +8,7 @@ namespace HRSystem.Dal
     {
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            RegisterAttributes(modelBuilder);
-
-            modelBuilder.Entity<Employee>()
-                .HasKey(employee => employee.Login);
-        }
-
-        private static void RegisterAttributes(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<AttributeBase>()
-                .ToTable("Attributes");
+            modelBuilder.Entity<Employee>().HasKey(employee => employee.Login);
             
             modelBuilder.Entity<AttributeBase>()
                 .Property(attribute => attribute.Name)
@@ -27,14 +18,13 @@ namespace HRSystem.Dal
                 .IsRequired();
             modelBuilder.Entity<AttributeBase>()
                 .HasRequired(a => a.Employee)
-                .WithMany(a => a.Attributes);
-            
-            modelBuilder.Entity<DateTimeAttribute>()
-                .ToTable("DateTimeAttributes");
-            modelBuilder.Entity<IntAttribute>()
-                .ToTable("IntAttributes");
-            modelBuilder.Entity<StringAttribute>()
-                .ToTable("StringAttributes");
+                .WithMany(a => a.Attributes)
+                .HasForeignKey(a => a.EmployeeLogin);
+
+            modelBuilder.Entity<AttributeBase>().ToTable("Attributes");
+            modelBuilder.Entity<DateTimeAttribute>().ToTable("DateTimeAttributes");
+            modelBuilder.Entity<IntAttribute>().ToTable("IntAttributes");
+            modelBuilder.Entity<StringAttribute>().ToTable("StringAttributes");
         }
     }
 }
