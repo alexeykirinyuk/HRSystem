@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using HRSystem.Common.Errors;
+using HRSystem.Global.Errors;
 
-namespace HRSystem.Common.Extensions
+namespace HRSystem.Global.Extensions
 {
     public static class ReflectionExtensions
     {

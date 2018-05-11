@@ -1,0 +1,7 @@
+﻿namespace HRSystem.Infrastructure.Infrastructure.Interfaces
+{
+    public interface ICommandDefinition<TParameters>
+        where TParameters: ICommandDefinition<TParameters>
+    {
+    }
+}

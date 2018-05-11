@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HRSystem.Common.Errors
+namespace HRSystem.Global.Errors
 {
     public static class ArgumentValidator
     {
@@ -11,7 +11,7 @@ namespace HRSystem.Common.Errors
                 throw new ArgumentNullException(paramName);
             }
         }
-
+        
         public static void EnsureNotNullOrEmpty(string paramName, string argument)
         {
             if (string.IsNullOrEmpty(argument))
