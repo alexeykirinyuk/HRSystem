@@ -1,4 +1,4 @@
-import {IGetAllAttributesResponse} from "./IEmployeeService";
+import {GetAllAttributesResponse} from "./IEmployeeService";
 import {AttributeType} from "../models/AttributeType";
 
 export interface ISaveAttributeParams {
@@ -13,7 +13,7 @@ export interface IAttributeSavingInfoQueryResponse {
 }
 
 export interface IAttributeService {
-    getAll(): Promise<IGetAllAttributesResponse>;
+    getAll(): Promise<GetAllAttributesResponse>;
 
     getSavingInfo(id?: number): Promise<IAttributeSavingInfoQueryResponse>;
 

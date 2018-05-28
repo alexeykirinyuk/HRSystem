@@ -1,4 +1,5 @@
-﻿using HRSystem.Domain.Attributes.Base;
+﻿using System;
+using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Domain.Attributes
 {
@@ -12,6 +13,16 @@ namespace HRSystem.Domain.Attributes
 
         public StringAttribute(Employee employee, AttributeInfo attributeInfo, string value) :
             base(employee, attributeInfo)
+        {
+            Value = value;
+        }
+
+        public override string GetValueAsString()
+        {
+            return Value ?? string.Empty;
+        }
+
+        public override void SetValueAsString(string value)
         {
             Value = value;
         }

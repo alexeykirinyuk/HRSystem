@@ -1,26 +1,33 @@
 import {
+    IAddEmployeeParams,
+    EmployeeSavingInfoResponse,
     IEmployeeService,
-    IGetAllEmployeesResponse,
-    IEmployeeCreationInfoResponse,
-    IAddEmployeeParams
+    GetAllEmployeesResponse, AddEmployeeParams
 } from "../core/IEmployeeService";
-import {IDataService} from "../core/IDataService";
-import {RequestUrls} from "./RequestUrls";
+import { IDataService } from "../core/IDataService";
+import { RequestUrls } from "./RequestUrls";
+import { StringHelper } from "../helpers/StringHelper";
 
 export class EmployeeService implements IEmployeeService {
     constructor(private dataService: IDataService) {
 
     }
 
-    public async getAll(): Promise<IGetAllEmployeesResponse> {
-        return await this.dataService.makeGetRequest<IGetAllEmployeesResponse>(RequestUrls.GET_ALL_EMPLOYEES);
+    public async getAll(): Promise<GetAllEmployeesResponse> {
+        let response = await this.dataService.makeGetRequest<GetAllEmployeesResponse>(RequestUrls.GET_ALL_EMPLOYEES);
+        return new GetAllEmployeesResponse(response);
     }
 
-    public getEmployeeCreationInfo(): Promise<IEmployeeCreationInfoResponse> {
-        return this.dataService.makeGetRequest(RequestUrls.GET_EMPLOYEE_CREATION_INFO);
+    public async getEmployeeSavingInfo(login: string, isCreate: boolean): Promise<EmployeeSavingInfoResponse> {
+        if (login == null) {
+            login = "";
+        }
+
+        let info = await this.dataService.makeGetRequest<EmployeeSavingInfoResponse>(`${RequestUrls.GET_EMPLOYEE_CREATION_INFO}?login=${login}&isCreate=${isCreate}`);
+        return new EmployeeSavingInfoResponse(info);
     }
 
     public addNewEmployee(request: IAddEmployeeParams): Promise<void> {
-        return this.dataService.makePostRequest(RequestUrls.ADD_EMPLOYEE, request);
+        return this.dataService.makePostRequest(RequestUrls.SAVE_EMPLOYEE, new AddEmployeeParams(request));
     }
 }

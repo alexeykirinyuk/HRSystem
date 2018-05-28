@@ -18,6 +18,8 @@ namespace HRSystem.Data
         public DbSet<AttributeInfo> AttributeInfos { get; set; }
         
         public DbSet<ActiveDirectoryAttributeInfo> ActiveDirectoryAttributeInfos { get; set; }
+        
+        public DbSet<BoolAttribute> BoolAttributes { get; set; }
 
         public DbSet<IntAttribute> IntAttributes { get; set; }
 

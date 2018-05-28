@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using HRSystem.Common.Errors;
+using HRSystem.Common.Validation;
 using HRSystem.Core;
 using HRSystem.Data;
 using HRSystem.Domain;
@@ -12,18 +13,18 @@ namespace HRSystem.Bll
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly HrSystemDb _database;
+        private readonly HrSystemDb _db;
 
         public EmployeeService(HrSystemDb hrSystemDb)
         {
             ArgumentHelper.EnsureNotNull(nameof(hrSystemDb), hrSystemDb);
 
-            _database = hrSystemDb;
+            _db = hrSystemDb;
         }
 
         public async Task<IEnumerable<Employee>> GetAll()
         {
-            return await _database.Employees
+            return await _db.Employees
                 .Include(e => e.Attributes)
                 .Include(e => e.Manager)
                 .ToArrayAsync()
@@ -34,18 +35,52 @@ namespace HRSystem.Bll
         {
             ArgumentHelper.EnsureNotNull(nameof(employee), employee);
 
-            await _database.Employees.AddAsync(employee).ConfigureAwait(false);
-            await _database.SaveChangesAsync().ConfigureAwait(false);
+            await _db.Employees.AddAsync(employee).ConfigureAwait(false);
+            await _db.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task Update(
+            string login, 
+            string firstName, 
+            string lastName, 
+            string email, 
+            string phone, 
+            string jobTitle,
+            string office,
+            string managerLogin, 
+            List<AttributeBase> attributes)
+        {
+            ArgumentHelper.EnsureNotNullOrEmpty(nameof(login), login);
+            ArgumentHelper.EnsureNotNullOrEmpty(nameof(firstName), firstName);
+            ArgumentHelper.EnsureNotNullOrEmpty(nameof(lastName), lastName);
+            
+            var employee = await _db.Employees.Include(e => e.Attributes).Include(e => e.Manager).GetByLogin(login);
+            employee.Update(
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                jobTitle: jobTitle,
+                office: office,
+                managerLogin: managerLogin,
+                attributes: attributes);
+
+            await _db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<AttributeInfo>> GetAttributes()
         {
-            return await _database.AttributeInfos.ToArrayAsync().ConfigureAwait(false);
+            return await _db.AttributeInfos.ToArrayAsync().ConfigureAwait(false);
         }
 
-        public async Task<bool> IsExists(string login)
+        public Task<bool> IsExists(string login)
         {
-            return await _database.Employees.AnyAsync(e => e.Login == login).ConfigureAwait(false);
+            return _db.Employees.AnyAsync(e => e.Login == login);
+        }
+
+        public Task<Employee> GetByLogin(string login)
+        {
+            return _db.Employees.SingleAsync(e => e.Login == login);
         }
     }
 }

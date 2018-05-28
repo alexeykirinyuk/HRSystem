@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj" />
+    <ProjectReference Include="..\OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure" />

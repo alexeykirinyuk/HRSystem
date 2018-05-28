@@ -12,5 +12,10 @@ namespace HRSystem.Common.Validation
         {
             Failures = failures;
         }
+
+        public ValidationException(string failure)
+        {
+            Failures = new List<ValidationFailure> {failure};
+        }
     }
 }

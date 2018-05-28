@@ -1,15 +1,16 @@
-import {Route, Switch} from "react-router";
+import { Route, Switch } from "react-router";
 import * as React from "react";
-import {EmployeeList} from "./components/EmployeeList/EmployeeList";
-import {IEmployeeService} from "./core/IEmployeeService";
-import {EmployeeService} from "./services/EmployeeService";
-import {IDataService} from "./core/IDataService";
-import {DataService} from "./services/DataService";
-import {Nav, Navbar, NavItem} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import {AttributeList} from "./components/AttirbuteList/AttributeList";
-import {IAttributeService} from "./core/IAttributeService";
-import {AttributeService} from "./services/AttributeService";
+import { EmployeeList } from "./components/EmployeeList/EmployeeList";
+import { IEmployeeService } from "./core/IEmployeeService";
+import { EmployeeService } from "./services/EmployeeService";
+import { IDataService } from "./core/IDataService";
+import { DataService } from "./services/DataService";
+import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { AttributeList } from "./components/AttirbuteList/AttributeList";
+import { IAttributeService } from "./core/IAttributeService";
+import { AttributeService } from "./services/AttributeService";
+import {LinkContainer} from "react-router-bootstrap";
 
 const baseUrl: string = "http://localhost:5000";
 const dataService: IDataService = new DataService(baseUrl);
@@ -25,9 +26,11 @@ export const App = () =>
                 </Navbar.Brand>
             </Navbar.Header>
             <Nav>
-                <NavItem eventKey={1}>
-                    <Link to="/attributes">Attributes</Link>
-                </NavItem>
+                <LinkContainer to="/attributes">
+                    <NavItem eventKey={1}>
+                        Attributes
+                    </NavItem>
+                </LinkContainer>
             </Nav>
         </Navbar>
         <Switch>

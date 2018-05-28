@@ -88,6 +88,8 @@ namespace HRSystem.Data.Migrations
 
                     b.Property<string>("ManagerLogin");
 
+                    b.Property<string>("Office");
+
                     b.Property<string>("Phone");
 
                     b.HasKey("Login");
@@ -97,11 +99,24 @@ namespace HRSystem.Data.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("HRSystem.Domain.Attributes.BoolAttribute", b =>
+                {
+                    b.HasBaseType("HRSystem.Domain.Attributes.Base.AttributeBase");
+
+                    b.Property<bool?>("Value")
+                        .HasColumnName("BoolAttributeValue");
+
+                    b.ToTable("BoolAttribute");
+
+                    b.HasDiscriminator().HasValue(4);
+                });
+
             modelBuilder.Entity("HRSystem.Domain.Attributes.DateTimeAttribute", b =>
                 {
                     b.HasBaseType("HRSystem.Domain.Attributes.Base.AttributeBase");
 
-                    b.Property<DateTime?>("Value");
+                    b.Property<DateTime?>("Value")
+                        .HasColumnName("DateTimeAttributeValue");
 
                     b.ToTable("DateTimeAttribute");
 
@@ -113,7 +128,7 @@ namespace HRSystem.Data.Migrations
                     b.HasBaseType("HRSystem.Domain.Attributes.Base.AttributeBase");
 
                     b.Property<int?>("Value")
-                        .HasColumnName("IntAttribute_Value");
+                        .HasColumnName("IntAttributeValue");
 
                     b.ToTable("IntAttribute");
 
@@ -125,7 +140,7 @@ namespace HRSystem.Data.Migrations
                     b.HasBaseType("HRSystem.Domain.Attributes.Base.AttributeBase");
 
                     b.Property<string>("Value")
-                        .HasColumnName("StringAttribute_Value");
+                        .HasColumnName("StringAttributeValue");
 
                     b.ToTable("StringAttribute");
 

@@ -1,8 +1,14 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using Autofac;
+using AutoMapper;
 using HRSystem.Bll;
 using HRSystem.Commands.SaveAttribute;
 using HRSystem.Commands.SaveEmployee;
 using HRSystem.Common.Validation;
+using HRSystem.Composition;
 using HRSystem.Core;
 using HRSystem.Data;
 using HRSystem.Infrastructure;
@@ -16,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using OneInc.ADEditor.ActiveDirectory;
 
 namespace HRSystem.Web
 {
@@ -42,16 +49,45 @@ namespace HRSystem.Web
             services.AddDbContext<HrSystemDb>(options => options.UseSqlServer(connectionString));
             services.AddMvc();
 
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IAttributeService, AttributeService>();
-            services.AddScoped<ICreateAttributeService, CreateAttributeService>();
-
-            services.AddScoped<IValidator<SaveEmployeeCommand>, SaveEmployeeCommandValidator>();
-            services.AddScoped<IValidator<SaveAttributeCommand>, SaveAttributeCommandValidator>();
-            services.AddScoped<IValidator<AttributeSavingInfoQuery>, AttributeSavingInfoQueryValidator>();
-            
             services.AddMediatR(typeof(EmployeeQuery), typeof(SaveEmployeeCommand));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+            
+            ConfigureMapper();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new CompositionModule());
+            builder.Register(a => Configuration.GetSection("activeDirectory").Get<ActiveDirectorySettings>())
+                .AsSelf()
+                .SingleInstance();
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
+            
+            var mediatrOpenTypes = new[]
+            {
+                typeof(IRequestHandler<,>),
+                typeof(INotificationHandler<>),
+            };
+
+            foreach (var mediatrOpenType in mediatrOpenTypes)
+            {
+                builder
+                    .RegisterAssemblyTypes(typeof(Ping).GetTypeInfo().Assembly)
+                    .AsClosedTypesOf(mediatrOpenType)
+                    .AsImplementedInterfaces();
+            }
+
+            builder.RegisterGeneric(typeof(ValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+        }
+        
+        private void ConfigureMapper()
+        {
+            Mapper.Initialize(
+                cfg =>
+                {
+                    cfg.AddProfile<AutomapperProfile>();
+                });
+            Mapper.AssertConfigurationIsValid();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

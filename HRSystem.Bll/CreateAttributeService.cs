@@ -1,53 +1,25 @@
 ﻿using System;
-using HRSystem.Common.Errors;
+using System.Collections.Generic;
+using System.Linq;
+using HRSystem.Bll.Cast;
 using HRSystem.Core;
-using HRSystem.Domain.Attributes;
 using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Bll
 {
     public class CreateAttributeService : ICreateAttributeService
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly ICollection<ICastService> _castServices;
 
-        public CreateAttributeService(IEmployeeService employeeService, IAttributeService attributeService)
+        public CreateAttributeService(IEnumerable<ICastService> castServices)
         {
-            ArgumentHelper.EnsureNotNull(nameof(employeeService), employeeService);
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
-
-            _employeeService = employeeService;
-            _attributeService = attributeService;
+            _castServices = castServices.ToArray();
         }
 
         public AttributeBase CreateAttribute(int attributeInfoId, string value, AttributeType type)
         {
-            switch (type)
-            {
-                case AttributeType.Int:
-                    return new IntAttribute
-                    {
-                        AttributeInfoId = attributeInfoId,
-                        Descriminator = type,
-                        Value = int.Parse(value)
-                    };
-                case AttributeType.String:
-                    return new StringAttribute
-                    {
-                        AttributeInfoId = attributeInfoId,
-                        Descriminator = type,
-                        Value = value
-                    };
-                case AttributeType.DateTime:
-                    return new DateTimeAttribute
-                    {
-                        AttributeInfoId = attributeInfoId,
-                        Descriminator = type,
-                        Value = DateTime.Parse(value)
-                    };
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            return _castServices.Single(service => service.Type == type)
+                .Cast(attributeInfoId, value);
         }
     }
 }

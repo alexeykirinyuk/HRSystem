@@ -8,7 +8,11 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="MediatR" Version="4.1.0" />
+    <PackageReference Include="MediatR.Extensions.Autofac" Version="0.6.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.0.4" />
@@ -18,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HRSystem.Bll\HRSystem.Bll.csproj" />
     <ProjectReference Include="..\HRSystem.Commands\HRSystem.Commands.csproj" />
+    <ProjectReference Include="..\HRSystem.Composition\HRSystem.Composition.csproj" />
     <ProjectReference Include="..\HRSystem.Data\HRSystem.Data.csproj" />
     <ProjectReference Include="..\HRSystem.Infrastructure\HRSystem.Infrastructure.csproj" />
     <ProjectReference Include="..\HRSystem.Queries\HRSystem.Queries.csproj" />

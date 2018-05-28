@@ -43,21 +43,33 @@ namespace HRSystem.Commands.SaveEmployee
 
         private async Task CheckLogin(List<ValidationFailure> list, SaveEmployee.SaveEmployeeCommand request)
         {
-            if (await _employeeService.IsExists(request.Login).ConfigureAwait(false))
+            var exists = await _employeeService.IsExists(request.Login).ConfigureAwait(false);
+            
+            if (exists && request.IsCreateCommand)
             {
-                list.Add("Same login already exists.");
+                list.Add($"Login '{request.Login}' already exists.");
+            }
+
+            if (!exists && !request.IsCreateCommand)
+            {
+                list.Add($"Login '{request.Login}' not found.");
             }
         }
 
-        private async Task CheckManager(List<ValidationFailure> list, SaveEmployee.SaveEmployeeCommand request)
+        private async Task CheckManager(List<ValidationFailure> list, SaveEmployeeCommand request)
         {
+            if (string.IsNullOrEmpty(request.ManagerLogin))
+            {
+                return;
+            }
+            
             if (!await _employeeService.IsExists(request.ManagerLogin).ConfigureAwait(false))
             {
                 list.Add("Manager login was't found.");
             }
         }
 
-        private async Task CheckAttributes(List<ValidationFailure> list, SaveEmployee.SaveEmployeeCommand request)
+        private async Task CheckAttributes(List<ValidationFailure> list, SaveEmployeeCommand request)
         {
             var tasks = request.Attributes.Select(employeeAttribute => CheckAttribute(list, employeeAttribute))
                 .ToList();

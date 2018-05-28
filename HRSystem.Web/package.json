@@ -7,11 +7,11 @@
     "start": "webpack --profile --colors --display-error-details --watch"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/prop-types": "^15.5.2",
     "@types/react": "16.3.13",
     "@types/react-bootstrap": "^0.32.9",
     "@types/react-dom": "16.0.5",
+    "@types/react-router-bootstrap": "^0.24.4",
     "@types/react-router-dom": "^4.2.6",
     "@types/react-select": "^1.2.6",
     "@types/react-table": "^6.7.11",
@@ -24,10 +24,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "office-ui-fabric-react": "5.96.1",
     "react": "16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "16.3.2",
+    "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",
     "react-select": "^1.2.1"
   }

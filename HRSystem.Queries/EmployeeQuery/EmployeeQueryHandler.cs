@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using HRSystem.Common.Errors;
 using HRSystem.Core;
+using HRSystem.Web.Dtos;
 using MediatR;
 
 namespace HRSystem.Queries.EmployeeQuery
@@ -30,8 +34,8 @@ namespace HRSystem.Queries.EmployeeQuery
 
             return new EmployeeQueryResponse
             {
-                Employees = employees.ToArray(),
-                Attributes = attributes.ToArray()
+                Employees = Mapper.Map<ICollection<EmployeeDto>>(employees.ToArray()),
+                Attributes = Mapper.Map<ICollection<AttributeInfoDto>>(attributes.ToArray())
             };
         }
     }

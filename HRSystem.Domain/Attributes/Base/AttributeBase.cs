@@ -1,4 +1,5 @@
-﻿using HRSystem.Common.Errors;
+﻿using System.Security.Cryptography.X509Certificates;
+using HRSystem.Common.Errors;
 
 namespace HRSystem.Domain.Attributes.Base
 {
@@ -31,6 +32,9 @@ namespace HRSystem.Domain.Attributes.Base
 
             Descriminator = attributeInfo.Type;
         }
+
+        public abstract string GetValueAsString();
+        public abstract void SetValueAsString(string value);
 
         public IAttributeWithValue<T> GetValue<T>()
         {

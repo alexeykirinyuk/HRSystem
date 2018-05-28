@@ -6,5 +6,6 @@
         String,
         DateTime,
         Employee,
+        Bool
     }
 }

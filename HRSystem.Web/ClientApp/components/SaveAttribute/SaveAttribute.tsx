@@ -1,12 +1,12 @@
 import * as React from "react";
-import {ISaveAttributeProps} from "./ISaveAttributeProps";
-import {ISaveAttributeState} from "./ISaveAttributeState";
-import {Button, ControlLabel, FormControl, FormGroup, Modal} from "react-bootstrap";
-import {EventHelper} from "../../helpers/EventHelper";
-import {StringHelper} from "../../helpers/StringHelper";
-import {AttributeType, AttributeTypeHelper} from "../../models/AttributeType";
-import Select, {Option} from "react-select";
-import {Spinner} from "../Spinner/Spinner";
+import { ISaveAttributeProps } from "./ISaveAttributeProps";
+import { ISaveAttributeState } from "./ISaveAttributeState";
+import { Button, ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
+import { EventHelper } from "../../helpers/EventHelper";
+import { StringHelper } from "../../helpers/StringHelper";
+import { AttributeType, AttributeTypeHelper } from "../../models/AttributeType";
+import Select, { Option } from "react-select";
+import { Spinner } from "../Spinner/Spinner";
 
 export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAttributeState> {
     public constructor(props: ISaveAttributeProps) {
@@ -16,7 +16,7 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
             id: props.id,
             onHide: props.onHide,
             show: props.show,
-            name: StringHelper.Empty,
+            name: StringHelper.EMPTY,
             type: AttributeType.String,
             attributeTypeOption: {
                 label: AttributeType[AttributeType.String],
@@ -61,7 +61,8 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => this.setState({show: false})}>Close</Button>
-                <Button bsStyle="primary" onClick={() => this.clickSave()}>{this.state.id == null ? "Create" : "Update"}</Button>
+                <Button bsStyle="primary"
+                        onClick={() => this.clickSave()}>{this.state.id == null ? "Create" : "Update"}</Button>
             </Modal.Footer>
         </Modal>);
     }
@@ -70,7 +71,8 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
         this.setState({
             id: props.id,
             show: props.show,
-            onHide: props.onHide});
+            onHide: props.onHide
+        });
 
         this.componentDidMountAsync(props.id).then();
     }

@@ -3,16 +3,19 @@ import {AttributeInfo} from "./AttributeInfo";
 
 export class AttributeBase {
     public id: number;
-    public employee: Employee;
     public attributeInfo: AttributeInfo;
+    public value: string;
 
-    private value: any;
+    public constructor(params?: AttributeBase) {
+        if (params == null) {
+            return;
+        }
 
-    public GetValue<T>(): T {
-        return this.value;
-    }
+        this.id = params.id;
 
-    public SetValue<T>(value: T): void {
-        this.value = value;
+        if (params.attributeInfo != null) {
+            this.attributeInfo = new AttributeInfo(params.attributeInfo);
+        }
+        this.value = params.value;
     }
 }

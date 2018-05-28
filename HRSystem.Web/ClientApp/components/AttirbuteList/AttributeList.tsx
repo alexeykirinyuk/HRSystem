@@ -34,7 +34,7 @@ export class AttributeList extends React.Component<IAttributeListProps, IAttribu
                 </thead>
                 <tbody>
                 {
-                    this.state.attributes.map(a => <tr>
+                    this.state.attributes.map(a => <tr key={a.id}>
                         <td>{a.name}</td>
                         <td>{AttributeType[a.type]}</td>
                         <td><Button bsStyle="primary" onClick={() => this.update(a)}>Update</Button></td>

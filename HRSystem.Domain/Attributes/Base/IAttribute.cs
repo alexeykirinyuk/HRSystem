@@ -6,8 +6,6 @@
 
         string EmployeeLogin { get; set; }
 
-        Employee Employee { get; set; }
-
         int AttributeInfoId { get; set; }
 
         AttributeInfo AttributeInfo { get; set; }

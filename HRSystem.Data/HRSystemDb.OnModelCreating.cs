@@ -25,14 +25,25 @@ namespace HRSystem.Data
                 .HasDiscriminator(attribute => attribute.Descriminator)
                 .HasValue<DateTimeAttribute>(AttributeType.DateTime)
                 .HasValue<IntAttribute>(AttributeType.Int)
-                .HasValue<StringAttribute>(AttributeType.String);
+                .HasValue<StringAttribute>(AttributeType.String)
+                .HasValue<BoolAttribute>(AttributeType.Bool);
 
             modelBuilder.Entity<DateTimeAttribute>()
-                .ToTable("DateTimeAttribute");
+                .ToTable("DateTimeAttribute")
+                .Property(d => d.Value)
+                .HasColumnName("DateTimeAttributeValue");
             modelBuilder.Entity<IntAttribute>()
-                .ToTable("IntAttribute");
+                .ToTable("IntAttribute")
+                .Property(d => d.Value)
+                .HasColumnName("IntAttributeValue");
             modelBuilder.Entity<StringAttribute>()
-                .ToTable("StringAttribute");
+                .ToTable("StringAttribute")
+                .Property(d => d.Value)
+                .HasColumnName("StringAttributeValue");
+            modelBuilder.Entity<BoolAttribute>()
+                .ToTable("BoolAttribute")
+                .Property(d => d.Value)
+                .HasColumnName("BoolAttributeValue");
         }
     }
 }

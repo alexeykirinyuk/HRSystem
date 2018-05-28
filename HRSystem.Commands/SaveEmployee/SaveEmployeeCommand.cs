@@ -18,9 +18,10 @@ namespace HRSystem.Commands.SaveEmployee
         public string LastName { get; set; }
         public string Email { get; set; }
         public string JobTitle { get; set; }
+        public string Office { get; set; }
         public string Phone { get; set; }
         public string ManagerLogin { get; set; }
         public ICollection<EmployeeAttribute> Attributes { get; set; }
-        public bool Create { get; set; }
+        public bool IsCreateCommand { get; set; }
     }
 }

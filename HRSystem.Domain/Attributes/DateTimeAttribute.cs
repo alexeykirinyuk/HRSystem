@@ -1,6 +1,5 @@
 ﻿using System;
 using HRSystem.Domain.Attributes.Base;
-using HRSystem.Global;
 
 namespace HRSystem.Domain.Attributes
 {
@@ -12,9 +11,27 @@ namespace HRSystem.Domain.Attributes
         {
         }
 
-        public DateTimeAttribute(Employee employee, AttributeInfo attributeInfo, DateTime? value) : base(employee, attributeInfo)
+        public DateTimeAttribute(Employee employee, AttributeInfo attributeInfo, DateTime? value) : base(employee,
+            attributeInfo)
         {
             Value = value;
+        }
+
+        public override string GetValueAsString()
+        {
+            return Value?.ToString() ?? string.Empty;
+        }
+
+        public override void SetValueAsString(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                Value = null;
+            }
+            else
+            {
+                Value = DateTime.Parse(value);
+            }
         }
     }
 }

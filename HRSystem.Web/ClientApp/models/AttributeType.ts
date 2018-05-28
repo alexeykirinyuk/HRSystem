@@ -2,7 +2,8 @@ export enum AttributeType {
     Int,
     String,
     DateTime,
-    Employee
+    Employee,
+    Bool
 }
 
 export class AttributeTypeHelper {
@@ -11,7 +12,8 @@ export class AttributeTypeHelper {
             AttributeType.String,
             AttributeType.DateTime,
             AttributeType.Int,
-            AttributeType.Employee
+            AttributeType.Employee,
+            AttributeType.Bool
         ];
     }
 }

@@ -9,4 +9,8 @@
     <PackageReference Include="LinqToLdap" Version="4.0.0" />
     <PackageReference Include="LinqToLdapExtensions" Version="1.0.5" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
+    <ProjectReference Include="..\OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj" />
+  </ItemGroup>
 </Project>
