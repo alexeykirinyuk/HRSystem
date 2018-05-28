@@ -14,14 +14,18 @@ namespace HRSystem.Data
         public DbSet<Employee> Employees { get; set; }
 
         #region Attributes
-
-        public DbSet<AttributeBase> Attributes { get; set; }
+        
+        public DbSet<AttributeInfo> AttributeInfos { get; set; }
+        
+        public DbSet<ActiveDirectoryAttributeInfo> ActiveDirectoryAttributeInfos { get; set; }
 
         public DbSet<IntAttribute> IntAttributes { get; set; }
 
         public DbSet<StringAttribute> StringAttributes { get; set; }
 
         public DbSet<DateTimeAttribute> DateTimeAttributes { get; set; }
+        
+        public DbSet<AttributeBase> AttributeBases { get; set; }
 
         #endregion
     }

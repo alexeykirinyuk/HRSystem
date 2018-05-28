@@ -1,8 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {HRSystem} from "./components/HRSystem/HRSystem";
+import {BrowserRouter} from "react-router-dom";
+import {App} from "./App";
 
 ReactDOM.render(
-    <HRSystem />,
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>,
     document.getElementById("example")
 );

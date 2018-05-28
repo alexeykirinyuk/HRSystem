@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using HRSystem.Global.Errors;
+using HRSystem.Common.Errors;
 
 namespace HRSystem.Global.Extensions
 {
@@ -7,8 +7,8 @@ namespace HRSystem.Global.Extensions
     {
         public static object GetPropertyValue(this object obj, PropertyInfo propertyInfo)
         {
-            ArgumentValidator.EnsureNotNull(nameof(obj), obj);
-            ArgumentValidator.EnsureNotNull(nameof(propertyInfo), propertyInfo);
+            ArgumentHelper.EnsureNotNull(nameof(obj), obj);
+            ArgumentHelper.EnsureNotNull(nameof(propertyInfo), propertyInfo);
 
             return propertyInfo.GetValue(obj);
         }

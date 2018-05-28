@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.DirectoryServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LinqToLdap" Version="4.0.0" />
+    <PackageReference Include="LinqToLdapExtensions" Version="1.0.5" />
+  </ItemGroup>
+</Project>

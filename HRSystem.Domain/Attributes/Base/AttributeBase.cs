@@ -1,36 +1,40 @@
-﻿using HRSystem.Global.Errors;
+﻿using HRSystem.Common.Errors;
 
 namespace HRSystem.Domain.Attributes.Base
 {
-    public abstract class AttributeBase
+    public abstract class AttributeBase : IAttribute
     {
         public int Id { get; set; }
         
         public string EmployeeLogin { get; set; }
-        
         public Employee Employee { get; set; }
-
-        public string Name { get; set; }
-
-        public AttributeType Type { get; set; }
         
-        public bool IsActiveDirectoryAttribute { get; set; }
-
-        public AttributeBase()
+        public int AttributeInfoId { get; set; }
+        public AttributeInfo AttributeInfo { get; set; }
+        
+        public AttributeType Descriminator { get; set; }
+        
+        protected AttributeBase()
         {
         }
 
-        public AttributeBase(string name, AttributeType type)
+        protected AttributeBase(Employee employee, AttributeInfo attributeInfo)
         {
-            ArgumentValidator.EnsureNotNullOrEmpty(nameof(name), name);
+            ArgumentHelper.EnsureNotNull("employee", employee);
+            ArgumentHelper.EnsureNotNull("attributeInfo", attributeInfo);
 
-            Name = name;
-            Type = type;
+            EmployeeLogin = employee.Login;
+            Employee = employee;
+
+            AttributeInfoId = attributeInfo.Id;
+            AttributeInfo = attributeInfo;
+
+            Descriminator = attributeInfo.Type;
         }
 
-        public AttributeWithValue<T> WithData<T>()
+        public IAttributeWithValue<T> GetValue<T>()
         {
-            return (AttributeWithValue<T>) this;
+            return (IAttributeWithValue<T>) this;
         }
     }
 }

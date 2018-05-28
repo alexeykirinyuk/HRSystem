@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
+    <ProjectReference Include="..\HRSystem.Data\HRSystem.Data.csproj" />
+  </ItemGroup>
+</Project>

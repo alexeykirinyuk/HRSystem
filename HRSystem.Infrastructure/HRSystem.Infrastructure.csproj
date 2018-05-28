@@ -5,4 +5,10 @@
   <ItemGroup>
     <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="4.1.0" />
+  </ItemGroup>
 </Project>

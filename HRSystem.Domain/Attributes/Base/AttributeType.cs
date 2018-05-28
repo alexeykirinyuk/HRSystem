@@ -4,6 +4,7 @@
     {
         Int,
         String,
-        DateTime
+        DateTime,
+        Employee,
     }
 }

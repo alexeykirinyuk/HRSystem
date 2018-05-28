@@ -11,20 +11,28 @@ namespace HRSystem.Data
         {
             modelBuilder.Entity<Employee>()
                 .HasKey(employee => employee.Login);
-            
-            modelBuilder.Entity<AttributeBase>()
-                .Property(attribute => attribute.Name)
+
+            modelBuilder.Entity<AttributeInfo>()
+                .Property(info => info.Name)
                 .IsRequired();
             modelBuilder.Entity<AttributeBase>()
                 .HasOne(attribute => attribute.Employee)
                 .WithMany(employee => employee.Attributes)
                 .HasForeignKey(attribute => attribute.EmployeeLogin)
                 .IsRequired();
-            
 
-            modelBuilder.Entity<DateTimeAttribute>().HasBaseType<AttributeBase>();
-            modelBuilder.Entity<IntAttribute>().HasBaseType<AttributeBase>();
-            modelBuilder.Entity<StringAttribute>().HasBaseType<AttributeBase>();
+            modelBuilder.Entity<AttributeBase>()
+                .HasDiscriminator(attribute => attribute.Descriminator)
+                .HasValue<DateTimeAttribute>(AttributeType.DateTime)
+                .HasValue<IntAttribute>(AttributeType.Int)
+                .HasValue<StringAttribute>(AttributeType.String);
+
+            modelBuilder.Entity<DateTimeAttribute>()
+                .ToTable("DateTimeAttribute");
+            modelBuilder.Entity<IntAttribute>()
+                .ToTable("IntAttribute");
+            modelBuilder.Entity<StringAttribute>()
+                .ToTable("StringAttribute");
         }
     }
 }

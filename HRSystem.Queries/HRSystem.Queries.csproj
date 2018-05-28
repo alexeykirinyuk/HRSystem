@@ -3,6 +3,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AsyncMediator" Version="2.0.0" />
     <PackageReference Include="MediatR" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj" />
+    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
+    <ProjectReference Include="..\HRSystem.Domain\HRSystem.Domain.csproj" />
   </ItemGroup>
 </Project>

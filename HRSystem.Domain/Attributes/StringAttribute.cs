@@ -1,18 +1,19 @@
-﻿using System;
-using HRSystem.Domain.Attributes.Base;
-using HRSystem.Global;
+﻿using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Domain.Attributes
 {
-    public class StringAttribute : AttributeWithValue<string>
+    public class StringAttribute : AttributeBase, IAttributeWithValue<string>
     {
-        [Obsolete(ErrorStrings.ForBindersOnly, true)]
-        private StringAttribute()
+        public string Value { get; set; }
+
+        public StringAttribute()
         {
         }
 
-        public StringAttribute(string name, string value) : base(name, value, AttributeType.String)
+        public StringAttribute(Employee employee, AttributeInfo attributeInfo, string value) :
+            base(employee, attributeInfo)
         {
+            Value = value;
         }
     }
 }

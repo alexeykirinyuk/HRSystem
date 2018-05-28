@@ -1,18 +1,19 @@
-﻿using System;
-using HRSystem.Domain.Attributes.Base;
-using HRSystem.Global;
+﻿using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Domain.Attributes
 {
-    public class IntAttribute : AttributeWithValue<int?>
+    public class IntAttribute : AttributeBase, IAttributeWithValue<int?>
     {
-        [Obsolete(ErrorStrings.ForBindersOnly, true)]
-        private IntAttribute()
+        public int? Value { get; set; }
+        
+        public IntAttribute()
         {
         }
 
-        public IntAttribute(string name, int? value) : base(name, value, AttributeType.Int)
+        public IntAttribute(Employee employee, AttributeInfo attributeInfo, int? value) : 
+            base(employee, attributeInfo)
         {
+            Value = value;
         }
     }
 }

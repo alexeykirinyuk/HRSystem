@@ -1,19 +1,20 @@
 ﻿using System;
 using HRSystem.Domain.Attributes.Base;
 using HRSystem.Global;
-using HRSystem.Global.Errors;
 
 namespace HRSystem.Domain.Attributes
 {
-    public class DateTimeAttribute : AttributeWithValue<DateTime?>
+    public class DateTimeAttribute : AttributeBase, IAttributeWithValue<DateTime?>
     {
-        [Obsolete(ErrorStrings.ForBindersOnly, true)]
-        private DateTimeAttribute()
+        public DateTime? Value { get; set; }
+
+        public DateTimeAttribute()
         {
         }
 
-        public DateTimeAttribute(string name, DateTime? value) : base(name, value, AttributeType.DateTime)
+        public DateTimeAttribute(Employee employee, AttributeInfo attributeInfo, DateTime? value) : base(employee, attributeInfo)
         {
+            Value = value;
         }
     }
 }
