@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
-using OneInc.ADEditor.Models;
+using HRSystem.Domain;
 
 namespace OneInc.ADEditor.Dal.Services.Interfaces
 {

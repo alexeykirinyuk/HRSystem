@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Domain.Attributes
 {
     public class DateTimeAttribute : AttributeBase, IAttributeWithValue<DateTime?>
     {
+        private const string DateTimeFormat = "yyyy-MM-dd";
+        
         public DateTime? Value { get; set; }
 
         public DateTimeAttribute()
@@ -19,7 +22,7 @@ namespace HRSystem.Domain.Attributes
 
         public override string GetValueAsString()
         {
-            return Value?.ToString() ?? string.Empty;
+            return Value?.ToString(DateTimeFormat) ?? string.Empty;
         }
 
         public override void SetValueAsString(string value)
@@ -30,7 +33,7 @@ namespace HRSystem.Domain.Attributes
             }
             else
             {
-                Value = DateTime.Parse(value);
+                Value = DateTime.ParseExact(value, DateTimeFormat, CultureInfo.InvariantCulture);
             }
         }
     }

@@ -46,7 +46,7 @@ export class EmployeeSavingInfoResponse {
     }
 }
 
-export interface IAddEmployeeParams {
+export interface ISaveEmployeeParams {
     login: string;
     firstName: string;
     lastName: string;
@@ -59,7 +59,7 @@ export interface IAddEmployeeParams {
     isCreateCommand: boolean;
 }
 
-export class AddEmployeeParams implements IAddEmployeeParams {
+export class AddEmployeeParams implements ISaveEmployeeParams {
     login: string;
     firstName: string;
     lastName: string;
@@ -71,7 +71,7 @@ export class AddEmployeeParams implements IAddEmployeeParams {
     attributes: IEmployeeAttribute[];
     isCreateCommand: boolean;
 
-    public constructor(params: IAddEmployeeParams) {
+    public constructor(params: ISaveEmployeeParams) {
         this.login = params.login;
         this.firstName = params.firstName;
         this.lastName = params.lastName;
@@ -92,7 +92,9 @@ export class AddEmployeeParams implements IAddEmployeeParams {
         if (!StringHelper.isNullOrEmpty(params.managerLogin)) {
             this.managerLogin = params.managerLogin;
         }
-        this.attributes = params.attributes.filter(a => !StringHelper.isNullOrEmpty(a.value));
+        this.attributes = params.attributes
+            .filter(a => a.type != AttributeType.Document)
+            .filter(a => !StringHelper.isNullOrEmpty(a.value));
     }
 }
 
@@ -107,5 +109,7 @@ export interface IEmployeeService {
 
     getEmployeeSavingInfo(login: string, isCreate: boolean): Promise<EmployeeSavingInfoResponse>;
 
-    addNewEmployee(request: IAddEmployeeParams): Promise<void>;
+    save(request: ISaveEmployeeParams): Promise<void>;
+
+    isFileExists(employee: string, attributeInfoId: number) : Promise<boolean>;
 }

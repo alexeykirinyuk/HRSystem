@@ -1,7 +1,7 @@
 ﻿using System.DirectoryServices.Protocols;
 using AutoMapper;
+using HRSystem.Domain;
 using OneInc.ADEditor.Dal.Mapping.ActiveDirectory;
-using OneInc.ADEditor.Models;
 
 namespace OneInc.ADEditor.Dal.Mapping
 {
@@ -18,7 +18,6 @@ namespace OneInc.ADEditor.Dal.Mapping
         private void ConfigureMapping()
         {
             CreateMap<SearchResultEntry, User>().ConvertUsing<ActiveDirectoryUserConverter>();
-            CreateMap<SearchResultEntry, Office>().ConvertUsing<ActiveDirectoryOfficeConverter>();
         }
     }
 }

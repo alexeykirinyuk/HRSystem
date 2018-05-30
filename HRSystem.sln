@@ -1,26 +1,33 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Web", "HRSystem.Web\HRSystem.Web.csproj", "{758CBA53-9434-40DB-9C21-BFFEA6E451C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Data", "HRSystem.Data\HRSystem.Data.csproj", "{8EA25B02-D239-4C4F-8D8F-A63E899E4B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Data", "HRSystem.Data\HRSystem.Data.csproj", "{8EA25B02-D239-4C4F-8D8F-A63E899E4B37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Domain", "HRSystem.Domain\HRSystem.Domain.csproj", "{CEE4BA63-013F-4B17-9E07-5D88D61C76CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Domain", "HRSystem.Domain\HRSystem.Domain.csproj", "{CEE4BA63-013F-4B17-9E07-5D88D61C76CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Commands", "HRSystem.Commands\HRSystem.Commands.csproj", "{A865A12B-4DC7-4FF8-94A8-A112E45D29F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Commands", "HRSystem.Commands\HRSystem.Commands.csproj", "{A865A12B-4DC7-4FF8-94A8-A112E45D29F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Queries", "HRSystem.Queries\HRSystem.Queries.csproj", "{32663C8C-2F06-4C7B-9919-6A168EE91C9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Queries", "HRSystem.Queries\HRSystem.Queries.csproj", "{32663C8C-2F06-4C7B-9919-6A168EE91C9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Common", "HRSystem.Common\HRSystem.Common.csproj", "{3A4A8AD0-0D10-4E35-BDCA-01AE4977E106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Common", "HRSystem.Common\HRSystem.Common.csproj", "{3A4A8AD0-0D10-4E35-BDCA-01AE4977E106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Core", "HRSystem.Core\HRSystem.Core.csproj", "{48B44754-C4D3-4739-A12F-AE01467E925A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Core", "HRSystem.Core\HRSystem.Core.csproj", "{48B44754-C4D3-4739-A12F-AE01467E925A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Bll", "HRSystem.Bll\HRSystem.Bll.csproj", "{B858F0CA-51C8-4CEC-B19D-890338238677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Bll", "HRSystem.Bll\HRSystem.Bll.csproj", "{B858F0CA-51C8-4CEC-B19D-890338238677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Infrastructure", "HRSystem.Infrastructure\HRSystem.Infrastructure.csproj", "{375828F5-159B-4822-869B-176238EC916F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Infrastructure", "HRSystem.Infrastructure\HRSystem.Infrastructure.csproj", "{375828F5-159B-4822-869B-176238EC916F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneInc.ADEditor.ActiveDirectory", "OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj", "{79F4453B-8E7E-46C1-A2EA-358029A760BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Composition", "HRSystem.Composition\HRSystem.Composition.csproj", "{A77DB87F-7FFE-468D-9B25-C021A82559A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRSystem.Composition", "HRSystem.Composition\HRSystem.Composition.csproj", "{A77DB87F-7FFE-468D-9B25-C021A82559A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneInc.ADEditor.Dal", "OneInc.ADEditor.Dal\OneInc.ADEditor.Dal.csproj", "{07BFA90D-A098-48B0-AE5F-1BBF0699793D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Service", "HRSystem.Service\HRSystem.Service.csproj", "{FC4747F5-52B9-49EB-9DB5-5A67BF026D2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,5 +79,19 @@ Global
 		{A77DB87F-7FFE-468D-9B25-C021A82559A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A77DB87F-7FFE-468D-9B25-C021A82559A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A77DB87F-7FFE-468D-9B25-C021A82559A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07BFA90D-A098-48B0-AE5F-1BBF0699793D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07BFA90D-A098-48B0-AE5F-1BBF0699793D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07BFA90D-A098-48B0-AE5F-1BBF0699793D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07BFA90D-A098-48B0-AE5F-1BBF0699793D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC4747F5-52B9-49EB-9DB5-5A67BF026D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC4747F5-52B9-49EB-9DB5-5A67BF026D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC4747F5-52B9-49EB-9DB5-5A67BF026D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC4747F5-52B9-49EB-9DB5-5A67BF026D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5940D601-A04F-4BAB-BECB-6A9359C1A038}
 	EndGlobalSection
 EndGlobal

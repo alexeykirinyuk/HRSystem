@@ -1,45 +1,21 @@
 import { ISaveEmployeeProps } from "./ISaveEmployeeProps";
 import { ISaveEmployeeState } from "./ISaveEmployeeState";
 import * as React from "react";
-import { Button, ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
 import { AttributeType } from "../../models/AttributeType";
 import { AttributeInfo } from "../../models/AttributeInfo";
 import { StringHelper } from "../../helpers/StringHelper";
 import { EventHelper } from "../../helpers/EventHelper";
 import Select, { Option } from "react-select";
+import { ValidationErrors } from "../../models/ValidationErrors";
+import { AttributeControl } from "../AttributeControl/AttributeControl";
 
 export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmployeeState> {
-    private static readonly typeMap: Map<AttributeType, string> =
-        new Map<AttributeType, string>();
-
-    static _initialize(): void {
-        this.typeMap.set(AttributeType.Int, "number");
-        this.typeMap.set(AttributeType.String, "text");
-        this.typeMap.set(AttributeType.DateTime, "date");
-        this.typeMap.set(AttributeType.Bool, "date");
-    }
 
     public constructor(props: ISaveEmployeeProps) {
         super(props);
 
-        this.state = {
-            attributes: [],
-            firstName: StringHelper.EMPTY,
-            email: StringHelper.EMPTY,
-            jobTitle: StringHelper.EMPTY,
-            lastName: StringHelper.EMPTY,
-            login: StringHelper.EMPTY,
-            phone: StringHelper.EMPTY,
-            attributesInfo: [],
-            isLoading: true,
-            employees: [],
-            show: props.show,
-            onHide: props.onHide,
-            managerLoginOption: null,
-            managerLogin: null,
-            isCreateCommand: props.isCreate,
-            office: StringHelper.EMPTY
-        };
+        this.state = this.getEmptyState(props.show, props.isCreate);
     }
 
     public render(): React.ReactElement<ISaveEmployeeProps> {
@@ -52,11 +28,18 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
         managerOptions.unshift({label: "", value: ""});
 
         return (
-            <Modal show={this.state.show} onHide={() => this.onHide()}
-                   onEscapeKeyUp={() => this.setState({show: false})}>
+            <Modal show={this.state.show} onHide={() => this.hide()}
+                   onEscapeKeyUp={() => this.hide()}>
                 <Modal.Header>Create new employee</Modal.Header>
                 <Modal.Body>
                     <form>
+                        <Alert hidden={this.state.validationErrors.length == 0}>
+                            <ul>
+                                {
+                                    this.state.validationErrors.map(e => <li key={e.message}>{e.message}</li>)
+                                }
+                            </ul>
+                        </Alert>
                         <FormGroup>
                             <ControlLabel>Login</ControlLabel>
                             <FormControl
@@ -128,17 +111,17 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
                         {
                             this.state.attributesInfo.map(a => <FormGroup key={a.id}>
                                 <ControlLabel>{a.name}</ControlLabel>
-                                <FormControl
-                                    type={SaveEmployee.typeMap.get(a.type)}
+                                <AttributeControl
+                                    info={a}
                                     placeholder={`Enter ${a.name} (custom)`}
                                     value={this.getAttribute(a)}
-                                    onChange={(event) => this.changeAttribute(a, EventHelper.getValue(event))}/>
+                                    onChange={(a: AttributeInfo, value: string) => this.changeAttribute(a, value)} />
                             </FormGroup>)
                         }
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => this.setState({show: false})}>Close</Button>
+                    <Button onClick={() => this.hide()}>Close</Button>
                     <Button bsStyle="primary"
                             onClick={() => this.clickSaveButton()}>{this.state.isCreateCommand ? "Create" : "Update"}</Button>
                 </Modal.Footer>
@@ -156,14 +139,14 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
 
     public componentWillReceiveProps(props: ISaveEmployeeProps): void {
         if (props.show && !this.state.show) {
-            this.setState({show: props.show, onHide: props.onHide, isCreateCommand: props.isCreate});
             this.componentWillMountAsync(props.login, props.isCreate).then();
         }
+        this.setState({show: props.show, isCreateCommand: props.isCreate});
     }
 
     private async componentWillMountAsync(login: string, isCreate: boolean): Promise<void> {
         this.setState({isLoading: true});
-        let info = await this.props.service.getEmployeeSavingInfo(login, isCreate);
+        let info = await this.props.employeeService.getEmployeeSavingInfo(login, isCreate);
         console.log(info.employee.managerLogin);
         console.log(info.employee.managerName);
 
@@ -188,6 +171,7 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
     }
 
     private changeAttribute(attributeInfo: AttributeInfo, value: string): void {
+        console.log(`Update ${attributeInfo.name}: ${value}`);
         this.setState(state => {
             let resultAttributes = state.attributes.slice();
             let filteredById = resultAttributes.filter(a => a.attributeInfoId == attributeInfo.id);
@@ -211,18 +195,42 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
 
     private async clickSaveButtonAsync(): Promise<void> {
         try {
-            await this.props.service.addNewEmployee(this.state);
-            this.setState({show: false});
+            await this.props.employeeService.save(this.state);
+            this.hide();
         } catch (e) {
+            if (ValidationErrors.isValidationError(e)) {
+                this.setState({validationErrors: ValidationErrors.parse(e)});
+            }
+
             console.log(e);
         }
     }
 
-    private onHide() {
-        if (this.state.onHide != null) {
-            this.state.onHide();
+    private hide() {
+        if (this.props.onHide != null) {
+            this.props.onHide();
         }
+        this.setState(this.getEmptyState(false, false));
+    }
+
+    private getEmptyState(show: boolean, isCreate: boolean): ISaveEmployeeState {
+        return {
+            attributes: [],
+            firstName: StringHelper.EMPTY,
+            email: StringHelper.EMPTY,
+            jobTitle: StringHelper.EMPTY,
+            lastName: StringHelper.EMPTY,
+            login: StringHelper.EMPTY,
+            phone: StringHelper.EMPTY,
+            attributesInfo: [],
+            isLoading: true,
+            employees: [],
+            show: show,
+            managerLoginOption: null,
+            managerLogin: null,
+            isCreateCommand: isCreate,
+            office: StringHelper.EMPTY,
+            validationErrors: []
+        };
     }
 }
-
-SaveEmployee._initialize();

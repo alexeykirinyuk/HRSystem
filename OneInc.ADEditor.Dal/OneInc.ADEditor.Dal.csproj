@@ -76,14 +76,7 @@
     <Compile Include="Extensions\DirectoryAttributeModificationExtensions.cs" />
     <Compile Include="Mapping\ActiveDirectoryAutomapperProfile.cs" />
     <Compile Include="Mapping\ActiveDirectory\ActiveDirectoryUserConverter.cs" />
-    <Compile Include="Mapping\SharePointAutomapperProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\JobRepository.cs" />
-    <Compile Include="Repositories\OfficeRepository.cs" />
-    <Compile Include="Repositories\EmployeeOnBoardingRepository.cs" />
-    <Compile Include="Repositories\EmployeeRepository.cs" />
-    <Compile Include="Repositories\PhotoRepository.cs" />
-    <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\ActiveDirectoryUserCreationInfoBuilderService.cs" />
     <Compile Include="Services\ActiveDirectoryUserUpdatingInfoBuilderService.cs" />

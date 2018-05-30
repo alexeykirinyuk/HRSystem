@@ -8,7 +8,7 @@ namespace HRSystem.Domain.Attributes
         
         public override string GetValueAsString()
         {
-            return Value?.ToString() ?? string.Empty;
+            return Value?.ToString().ToLower() ?? string.Empty;
         }
 
         public override void SetValueAsString(string value)

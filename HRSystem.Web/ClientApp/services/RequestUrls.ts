@@ -7,4 +7,5 @@ export class RequestUrls {
     public static readonly GET_ALL_ATTRIBUTES = "api/attribute/all";
     public static readonly ADD_ATTRIBUTE = "api/attribute/save";
     public static readonly GET_ATTRIBUTE_SAVING_INFO = "api/attribute/savingInfo";
+    public static readonly UPLOAD_FILE = "api/file/upload";
 }

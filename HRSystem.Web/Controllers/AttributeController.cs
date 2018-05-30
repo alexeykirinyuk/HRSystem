@@ -44,7 +44,7 @@ namespace HRSystem.Web.Controllers
             }
             catch (ValidationException e)
             {
-                return BadRequest(e.Failures);
+                return BadRequest(e.ToResponse());
             }
         }
     }

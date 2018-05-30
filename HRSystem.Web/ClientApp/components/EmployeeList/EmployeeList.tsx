@@ -6,6 +6,7 @@ import { Spinner } from "../Spinner/Spinner";
 import { SaveEmployee } from "../SaveEmployee/SaveEmployee";
 import { StringHelper } from "../../helpers/StringHelper";
 import { Employee } from "../../models/Employee";
+import { AttributeType } from "../../models/AttributeType";
 
 export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeListState> {
     public constructor(props: IEmployeeListProps) {
@@ -31,7 +32,7 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
                 <td>{e.phone}</td>
                 <td>{e.jobTitle}</td>
                 <td>{e.manager != null ? e.manager.fullName : ""}</td>
-                {this.getEmployeeAttributes(e).map(a => (<td key={a.id}>{a.value}</td>))}
+                {this.getEmployeeAttributes(e)}
                 <td>
                     <Button
                         onClick={() =>
@@ -42,9 +43,9 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
 
         return (<div>
             <SaveEmployee
-                service={this.props.service}
+                employeeService={this.props.employeeService}
                 show={this.state.showModal}
-                onHide={() => this.setState({showModal: false})}
+                onHide={() => this.hideModal()}
                 isCreate={this.state.isCreateModalType}
                 login={this.state.selectedEmployeeLogin}/>
             <div>
@@ -81,7 +82,7 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
     }
 
     private async componentDidMountAsync(): Promise<void> {
-        let getAllEmployeesResponse = await this.props.service.getAll();
+        let getAllEmployeesResponse = await this.props.employeeService.getAll();
         this.setState({
             employees: getAllEmployeesResponse.employees,
             attributes: getAllEmployeesResponse.attributes,
@@ -89,14 +90,23 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
         });
     }
 
-    private getEmployeeAttributes(employee: Employee): {id: number, value: string}[] {
+    private getEmployeeAttributes(employee: Employee): JSX.Element[] {
         return this.state.attributes.map(attributeInfo => {
-            let attributeBase = employee.attributes.filter(a => a.attributeInfo.id == attributeInfo.id);
-            if (attributeBase.length > 0) {
-                return {id: attributeInfo.id, value: attributeBase[0].value};
+            if (attributeInfo.type == AttributeType.Document) {
+                return <td key={attributeInfo.id}><Button href={`api/file/download/${employee.login}/${attributeInfo.id}`} target={"_blank"}>Download</Button></td>;
+            }
+
+            let attributeBases = employee.attributes.filter(a => a.attributeInfo.id == attributeInfo.id);
+            if (attributeBases.length > 0) {
+                return <td key={attributeInfo.id}>{attributeBases[0].value}</td>;
             } else {
-                return {id: attributeInfo.id, value: StringHelper.EMPTY};
+                return <td key={attributeInfo.id}/>;
             }
         });
+    }
+
+    private hideModal(): void {
+        this.setState({showModal: false, isLoading: true});
+        this.componentDidMountAsync().then();
     }
 }

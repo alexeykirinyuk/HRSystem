@@ -1,7 +1,7 @@
 import {IEmployeeService} from "../../core/IEmployeeService";
 
 export interface ISaveEmployeeProps {
-    service: IEmployeeService;
+    employeeService: IEmployeeService;
     show: boolean;
     onHide: () => void;
     isCreate: boolean;

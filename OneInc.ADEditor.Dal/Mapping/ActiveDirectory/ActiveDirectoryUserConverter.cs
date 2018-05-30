@@ -2,18 +2,17 @@
 using AutoMapper;
 using HRSystem.Domain;
 using OneInc.ADEditor.ActiveDirectory.Extensions;
-using OneInc.ADEditor.Models;
 using static OneInc.ADEditor.ActiveDirectory.ActiveDirectoryConstants;
 
 namespace OneInc.ADEditor.Dal.Mapping.ActiveDirectory
 {
-    internal sealed class ActiveDirectoryUserConverter : ITypeConverter<SearchResultEntry, Employee>
+    internal sealed class ActiveDirectoryUserConverter : ITypeConverter<SearchResultEntry, User>
     {
-        public Employee Convert(SearchResultEntry source, Employee destination, ResolutionContext context)
+        public User Convert(SearchResultEntry source, User destination, ResolutionContext context)
         {
             if (destination == null)
             {
-                destination = new Employee();
+                destination = new User();
             }
 
             destination.Login = source.GetPropertyValue(EntityAttributes.UserPrincipalName);
@@ -22,24 +21,8 @@ namespace OneInc.ADEditor.Dal.Mapping.ActiveDirectory
             destination.Email = source.GetPropertyValue(EntityAttributes.Email);
             destination.Phone = source.GetPropertyValue(EntityAttributes.Phone);
             destination.Office = source.GetPropertyValue(EntityAttributes.Office);
-
-            var managerDistinguishedName = source.GetPropertyValue(EntityAttributes.Manager);
-            if (!string.IsNullOrEmpty(managerDistinguishedName))
-            {
-                destination.Manager = new User { DistinguishedName = managerDistinguishedName };
-            }
-
-            var departmentName = source.GetPropertyValue(EntityAttributes.Department);
-            if (!string.IsNullOrWhiteSpace(departmentName))
-            {
-                destination.Department = new Product { Name = departmentName };
-            }
-
-            var jobTitle = source.GetPropertyValue(EntityAttributes.Job);
-            if (!string.IsNullOrWhiteSpace(jobTitle))
-            {
-                destination.Job = new Job { Title = jobTitle };
-            }
+            destination.ManagerDistinguishedName = source.GetPropertyValue(EntityAttributes.Manager);
+            destination.JobTitle = source.GetPropertyValue(EntityAttributes.Job);
 
             return destination;
         }

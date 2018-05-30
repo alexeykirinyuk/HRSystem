@@ -34,7 +34,7 @@ export const App = () =>
             </Nav>
         </Navbar>
         <Switch>
-            <Route exact path="/" component={() => <EmployeeList service={employeeService}/>}/>
+            <Route exact path="/" component={() => <EmployeeList employeeService={employeeService}/>}/>
             <Route exact path="/attributes" component={() => <AttributeList service={attributeService}/>}/>
         </Switch>
     </div>;

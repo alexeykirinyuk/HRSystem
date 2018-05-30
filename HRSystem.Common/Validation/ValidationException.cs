@@ -17,5 +17,14 @@ namespace HRSystem.Common.Validation
         {
             Failures = new List<ValidationFailure> {failure};
         }
+
+        public object ToResponse()
+        {
+            return new
+            {
+                ErrorType = "ValidationError",
+                Errors = Failures
+            };
+        }
     }
 }
