@@ -51,6 +51,7 @@
     <Compile Include="Installer.Designer.cs">
       <DependentUpon>Installer.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobProcessor.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>

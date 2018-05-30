@@ -82,5 +82,10 @@ namespace HRSystem.Bll
         {
             return _db.Employees.SingleAsync(e => e.Login == login);
         }
+
+        public Task SyncWithActiveDirectory()
+        {
+            
+        }
     }
 }
