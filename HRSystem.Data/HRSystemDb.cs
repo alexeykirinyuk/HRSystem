@@ -7,7 +7,7 @@ namespace HRSystem.Data
 {
     public partial class HrSystemDb : DbContext
     {
-        public HrSystemDb(DbContextOptions<HrSystemDb> contextOptions) : base(contextOptions)
+        public HrSystemDb(DbContextOptions contextOptions) : base(contextOptions)
         {
         }
 

@@ -85,6 +85,10 @@
     <Compile Include="SharePointEntitiesConstants.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj">
+      <Project>{48b44754-c4d3-4739-a12f-ae01467e925a}</Project>
+      <Name>HRSystem.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRSystem.Domain\HRSystem.Domain.csproj">
       <Project>{cee4ba63-013f-4b17-9e07-5d88d61c76cc}</Project>
       <Name>HRSystem.Domain</Name>

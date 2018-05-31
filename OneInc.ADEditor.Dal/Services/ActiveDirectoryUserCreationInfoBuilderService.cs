@@ -14,6 +14,9 @@ namespace OneInc.ADEditor.Dal.Services
     public class ActiveDirectoryUserCreationInfoBuilderService : IActiveDirectoryUserCreationInfoBuilderService
     {
         private readonly ActiveDirectorySettings _settings;
+        private const string Symbols = "abcdefghijklmnopqrstuvwxyz";
+        private const int PasswordLength = 21;
+        private static readonly Random Random = new Random();
 
         public ActiveDirectoryUserCreationInfoBuilderService(ActiveDirectorySettings settings)
         {
@@ -45,28 +48,36 @@ namespace OneInc.ADEditor.Dal.Services
             };
         }
 
-        private static void AddAttributeIfNotNullOrEmpty<T>(
-            ICollection<DirectoryAttribute> list,
-            string attibuteName,
-            T source,
-            Func<T, string> getValueFunc)
-        {
-            if (source == null)
-            {
-                return;
-            }
-
-            var value = getValueFunc(source);
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                list.Add(new DirectoryAttribute(attibuteName, value));
-            }
-        }
-
         private static byte[] GetFormattedPasswordAsBytes(string password)
         {
             return Encoding.Unicode.GetBytes($"\"{password}\"");
+        }
+
+        public string GeneratePassword()
+        {
+            var passwordArray = new char[PasswordLength];
+            var partLenght = passwordArray.Length / 3;
+
+            GeneratePart(passwordArray, partLenght, 1, GetRandomSymbol);
+            GeneratePart(passwordArray, partLenght, 2, () => char.ToUpper(GetRandomSymbol()));
+            GeneratePart(passwordArray, partLenght, 3, () => (char)('0' + Random.Next(10)));
+
+            return new string(passwordArray);
+        }
+
+        private static void GeneratePart(IList<char> passwordArray, int partLenght, int partNumber, Func<char> getSymbolFunc)
+        {
+            for (var i = partLenght * (partNumber - 1); i < partLenght * partNumber; i++)
+            {
+                passwordArray[i] = getSymbolFunc();
+            }
+        }
+
+        private static char GetRandomSymbol()
+        {
+            var index = Random.Next(Symbols.Length - 1);
+
+            return Symbols[index];
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using HRSystem.Common.Extensions;
 using OneInc.ADEditor.ActiveDirectory;
 using OneInc.ADEditor.ActiveDirectory.Services.Connection;
 using OneInc.ADEditor.ActiveDirectory.Services.Connection.Interfaces;
@@ -14,8 +15,8 @@ namespace HRSystem.Composition
     {
         private static readonly IEnumerable<string> AssemblyNames = new[]
         {
-            $"{nameof(HRSystem)}.Web",
             "OneInc.ADEditor.ActiveDirectory",
+            "OneInc.ADEditor.Dal",
             $"{nameof(HRSystem)}.Bll",
             $"{nameof(HRSystem)}.Commands",
             $"{nameof(HRSystem)}.Queries",
@@ -61,7 +62,9 @@ namespace HRSystem.Composition
 
         private static Assembly[] GetAssemblies()
         {
-            return AssemblyNames.Select(Assembly.Load).ToArray();
+            return AssemblyNames.Select(Assembly.Load)
+                .With(Assembly.GetExecutingAssembly())
+                .ToArray();
         }
     }
 }

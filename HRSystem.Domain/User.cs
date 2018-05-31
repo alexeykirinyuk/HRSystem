@@ -14,5 +14,20 @@
 
         public string ManagerDistinguishedName { get; set; }
         public virtual User Manager { get; set; }
+
+        public Employee ToEmployee()
+        {
+            return new Employee
+            {
+                Email = Email,
+                FirstName = FirstName,
+                JobTitle = JobTitle,
+                LastName = LastName,
+                Login = Login,
+                ManagerLogin = Manager?.Login,
+                Office = Office,
+                Phone = Phone
+            };
+        }
     }
 }

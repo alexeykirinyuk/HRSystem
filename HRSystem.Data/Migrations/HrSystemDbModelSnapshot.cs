@@ -16,7 +16,7 @@ namespace HRSystem.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rc1-32029")
+                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("HRSystem.Domain.Attributes.Base.ActiveDirectoryAttributeInfo", b =>
@@ -83,6 +83,8 @@ namespace HRSystem.Data.Migrations
                     b.Property<string>("FirstName");
 
                     b.Property<string>("JobTitle");
+
+                    b.Property<DateTime>("LastModified");
 
                     b.Property<string>("LastName");
 

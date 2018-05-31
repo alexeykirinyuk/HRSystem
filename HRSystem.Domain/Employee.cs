@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HRSystem.Domain.Attributes.Base;
 
@@ -14,6 +15,7 @@ namespace HRSystem.Domain
         public string Phone { get; set; }
         public string JobTitle { get; set; }
         public string Office { get; set; }
+        public DateTime LastModified { get; set; }
 
         public string ManagerLogin { get; set; }
         public virtual Employee Manager { get; set; }
@@ -54,6 +56,21 @@ namespace HRSystem.Domain
 
             Attributes.RemoveAll(currentAttribute =>
                 attributes.All(a => a.AttributeInfoId != currentAttribute.AttributeInfoId));
+        }
+
+        public User ToUser(string managerDistinguishedName)
+        {
+            return new User
+            {
+                Email = Email,
+                FirstName = FirstName,
+                JobTitle = JobTitle,
+                LastName = LastName,
+                Login = Login,
+                ManagerDistinguishedName = managerDistinguishedName,
+                Office = Office,
+                Phone = Phone
+            };
         }
     }
 }

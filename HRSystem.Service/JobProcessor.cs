@@ -12,9 +12,9 @@ namespace HRSystem.Service
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    await Task.Delay(interval, cancellationToken);
-
                     action();
+
+                    await Task.Delay(interval, cancellationToken);
                 }
             }, cancellationToken);
         }

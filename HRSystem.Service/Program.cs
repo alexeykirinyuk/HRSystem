@@ -12,14 +12,17 @@ namespace HRSystem.Service
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            var service = new Service1();
+            if (args.FirstOrDefault() == "test")
             {
-                new Service1()
-            };
-            ServiceBase.Run(ServicesToRun);
+                service.TestStart();
+            }
+            else
+            {
+                ServiceBase.Run(new ServiceBase[] {service});
+            }
         }
     }
 }

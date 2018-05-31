@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HRSystem.Domain;
@@ -28,5 +29,7 @@ namespace HRSystem.Core
         Task<bool> IsExists(string login);
         
         Task<Employee> GetByLogin(string login);
+
+        Task SyncWithActiveDirectory(DateTime fromDate);
     }
 }

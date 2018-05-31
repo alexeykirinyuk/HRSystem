@@ -26,6 +26,6 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests.Interfaces
 
         string BuildFilterForGettingUsersByUserPrincipalNames(ICollection<string> userPrincipals);
 
-        string BuildFilterForGettingUsersUpdatedBeetweenDates(string startDate, string endDate);
+        string BuildFilterForGettingUsersUpdatedFromDate(string startDate);
     }
 }

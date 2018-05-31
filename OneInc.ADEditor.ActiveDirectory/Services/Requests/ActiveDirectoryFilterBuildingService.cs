@@ -101,9 +101,9 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             return BuildFilterForFindingEntities(Entities.User, filter.ToString());
         }
 
-        public string BuildFilterForGettingUsersUpdatedBeetweenDates(string startDate, string endDate)
+        public string BuildFilterForGettingUsersUpdatedFromDate(string startDate)
         {
-            var filter = $"(&({EntityAttributes.WhenUpdated}>={startDate})({EntityAttributes.WhenUpdated}<={endDate}))";
+            var filter = $"({EntityAttributes.WhenUpdated}>={startDate})";
 
             return BuildFilterForFindingEntities(Entities.User, filter);
         }

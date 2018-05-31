@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using HRSystem.Core;
 using HRSystem.Domain;
 using LiteGuard;
 using OneInc.ADEditor.ActiveDirectory;
@@ -15,10 +16,8 @@ using static OneInc.ADEditor.ActiveDirectory.ActiveDirectoryConstants;
 
 namespace OneInc.ADEditor.Dal.Repositories
 {
-    public class UserRepository
+    public class UserService : IUserService
     {
-        private const string CanUpdateDistingUishedNameKey = "CanUpdate";
-
         private readonly IActiveDirectoryFilterBuildingService _filterBuildingService;
         private readonly IActiveDirectoryDistinguishedNameBuilderService _distinguishedNameBuilderService;
         private readonly IActiveDirectoryService _activeDirectoryService;
@@ -26,10 +25,7 @@ namespace OneInc.ADEditor.Dal.Repositories
         private readonly IActiveDirectoryUserUpdatingInfoBuilderService _updatingInfoBuilderService;
         private readonly string _parentDistinguishedName;
 
-        private static readonly object LockObject = new object();
-        private readonly string _canUpdateDistinguishedName;
-
-        public UserRepository(
+        public UserService(
             IActiveDirectoryFilterBuildingService filterBuildingService,
             IActiveDirectoryDistinguishedNameBuilderService distinguishedNameBuilderService,
             IActiveDirectoryService activeDirectoryService,
@@ -51,21 +47,50 @@ namespace OneInc.ADEditor.Dal.Repositories
             _updatingInfoBuilderService = updatingInfoBuilderService;
 
             _parentDistinguishedName = activeDirectorySettings.Paths[Entities.User];
-            _canUpdateDistinguishedName = activeDirectorySettings.Paths[CanUpdateDistingUishedNameKey];
         }
 
-        private User GetByLogin(string principalName)
+        public User GetByLogin(string login)
         {
-            var filter = _filterBuildingService.BuildFilterForGettingUserByPrincipalName(principalName);
+            var filter = _filterBuildingService.BuildFilterForGettingUserByPrincipalName(login);
             var entity = _activeDirectoryService.Find(_parentDistinguishedName, filter);
 
             var user = Mapper.Map<User>(entity);
+            if (user == null)
+            {
+                return null;
+            }
+            
             if (!string.IsNullOrEmpty(user.ManagerDistinguishedName))
             {
                 user.Manager = GetByDistinguishedName(user.ManagerDistinguishedName);
             }
 
             return user;
+        }
+
+        public void Create(User user)
+        {
+            var password = _creationInfoBuilderService.GeneratePassword();
+            var attributes = _creationInfoBuilderService.BuilUserCreationInfo(user, password);
+            _activeDirectoryService.Create(
+                GetOfficeDistinguishedNameByLocation(user.Office),
+                user.FullName,
+                attributes.ToArray());
+        }
+
+        public void Update(User user)
+        {
+            var oldUser = GetByLogin(user.Login);
+            user.DistinguishedName = oldUser.DistinguishedName;
+
+            var updatingInfo = _updatingInfoBuilderService.BuildUserUpdatingInfo(user, oldUser).ToArray();
+            if (!updatingInfo.Any())
+            {
+                return;
+            }
+
+            _activeDirectoryService.Update(user.DistinguishedName, updatingInfo);
+            UpdateDistinguishedName(user, oldUser);
         }
 
         public User GetByDistinguishedName(string distinguishedName)
@@ -76,17 +101,6 @@ namespace OneInc.ADEditor.Dal.Repositories
             var result = _activeDirectoryService.Find(path, filter);
             
             return Mapper.Map<User>(result);
-        }
-
-        public string Create(User user, string password)
-        {
-            var attributes = _creationInfoBuilderService.BuilUserCreationInfo(user, password);
-            var result = _activeDirectoryService.Create(
-                GetOfficeDistinguishedNameByLocation(user.Office),
-                user.FullName,
-                attributes.ToArray());
-
-            return result;
         }
 
         private string GetOfficeDistinguishedNameByLocation(string location)
@@ -102,23 +116,6 @@ namespace OneInc.ADEditor.Dal.Repositories
         private static string PrepareLocation(string location)
         {
             return location.Split(',').FirstOrDefault() ?? string.Empty;
-        }
-
-        public bool UpdateIfNeeded(User user)
-        {
-            var oldUser = GetByLogin(user.Login);
-            user.DistinguishedName = oldUser.DistinguishedName;
-
-            var updatingInfo = _updatingInfoBuilderService.BuildUserUpdatingInfo(user, oldUser).ToArray();
-            if (!updatingInfo.Any())
-            {
-                return false;
-            }
-
-            _activeDirectoryService.Update(user.DistinguishedName, updatingInfo);
-            UpdateDistinguishedName(user, oldUser);
-
-            return true;
         }
 
         private void UpdateDistinguishedName(User user, User oldUser)
@@ -142,12 +139,10 @@ namespace OneInc.ADEditor.Dal.Repositories
 
             return officeNotEquals || nameNotEquals;
         }
-
-        public IEnumerable<User> GetUsersUpdatedBeetweenDates(DateTime startDate, DateTime endDate)
+        public IEnumerable<User> GetUsersUpdatedFrom(DateTime from)
         {
-            var filter = _filterBuildingService.BuildFilterForGettingUsersUpdatedBeetweenDates(
-                startDate.ConvertToActiveDirectoryString(),
-                endDate.ConvertToActiveDirectoryString());
+            var filter = _filterBuildingService.BuildFilterForGettingUsersUpdatedFromDate(
+                from.ConvertToActiveDirectoryString());
             var result = _activeDirectoryService.FindEntities(_parentDistinguishedName, filter);
             return Mapper.Map<IEnumerable<User>>(result);
         }

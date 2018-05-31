@@ -6,6 +6,7 @@
     <PackageReference Include="Autofac" Version="4.8.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj" />
     <ProjectReference Include="..\OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj" />
   </ItemGroup>
 </Project>

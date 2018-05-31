@@ -66,7 +66,7 @@ namespace HRSystem.Web
             var mediatrOpenTypes = new[]
             {
                 typeof(IRequestHandler<,>),
-                typeof(INotificationHandler<>),
+                typeof(INotificationHandler<>)
             };
 
             foreach (var mediatrOpenType in mediatrOpenTypes)
