@@ -6,10 +6,6 @@
 
         string BuildDistinguishedName(string name, string parentDistinguishedName);
 
-        string GetNamePrefixFromDistinguishedName(string distinguishedName);
-
-        string GetNameFromDistinguishedName(string distinguishedName);
-
         string GetParentDirectoryFromDistinguishedName(string distinguishedName);
     }
 }

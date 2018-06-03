@@ -33,7 +33,7 @@ namespace HRSystem.ActiveDirectory.Services.Connection
                 Credential = new NetworkCredential(_settings.Login, _settings.Password),
                 SessionOptions =
                 {
-                    SaslMethod = "GSSAPI",
+                    SaslMethod = _settings.SaslMethod,
                     ProtocolVersion = _settings.ProtocolVersion
                 }
             };

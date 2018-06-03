@@ -6,7 +6,7 @@ namespace HRSystem.ActiveDirectory.Dal.Services.Interfaces
 {
     public interface IActiveDirectoryUserCreationInfoBuilderService
     {
-        IEnumerable<DirectoryAttribute> BuildUserCreationInfo(User user, string password);
+        IEnumerable<DirectoryAttribute> BuildUserCreationInfo(Account account, string password);
 
         string GeneratePassword();
     }

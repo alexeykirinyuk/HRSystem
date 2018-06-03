@@ -10,12 +10,12 @@ namespace HRSystem.ActiveDirectory.Services.Requests.Interfaces
         SearchResponse MakeSearchRequest(string path, string filter, SearchScope scope, params string[] attributes);
 
         ModifyResponse MakeModifyRequest(
-            string id,
+            string distinguishedName,
             DirectoryAttributeOperation operation,
             string attributeName,
             params object[] attributeValues);
 
-        ModifyResponse MakeModifyRequest(string id, IEnumerable<DirectoryAttributeModification> modifications);
+        ModifyResponse MakeModifyRequest(string distinguishedName, IEnumerable<DirectoryAttributeModification> modifications);
 
         ModifyDNResponse MakeModifyDistinguishedName(string currentDistinguishedName, string parentDistinguishedName, string newName);
 

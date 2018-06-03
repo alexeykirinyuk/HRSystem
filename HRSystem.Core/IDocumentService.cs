@@ -7,7 +7,7 @@ namespace HRSystem.Core
     {
         void Save(Employee employee, AttributeInfo attributeInfo, Document document);
 
-        Document LoadAsync(Employee employee, AttributeInfo attributeInfo);
+        Document Load(Employee employee, AttributeInfo attributeInfo);
 
         bool IsExists(Employee employee, AttributeInfo attributeInfo);
 

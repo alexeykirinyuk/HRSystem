@@ -40,24 +40,24 @@ namespace HRSystem.ActiveDirectory.Services.Requests
         }
 
         public ModifyResponse MakeModifyRequest(
-            string id,
+            string distinguishedName,
             DirectoryAttributeOperation operation,
             string attributeName,
             params object[] attributeValues)
         {
             using (var connection = _connectionService.OpenConnection())
             {
-                var request = new ModifyRequest(id, operation, attributeName, attributeValues);
+                var request = new ModifyRequest(distinguishedName, operation, attributeName, attributeValues);
 
                 return (ModifyResponse) connection.SendRequest(request);
             }
         }
 
-        public ModifyResponse MakeModifyRequest(string id, IEnumerable<DirectoryAttributeModification> modifications)
+        public ModifyResponse MakeModifyRequest(string distinguishedName, IEnumerable<DirectoryAttributeModification> modifications)
         {
             using (var connection = _connectionService.OpenConnection())
             {
-                var request = new ModifyRequest(id, modifications.ToArray());
+                var request = new ModifyRequest(distinguishedName, modifications.ToArray());
 
                 return (ModifyResponse) connection.SendRequest(request);
             }

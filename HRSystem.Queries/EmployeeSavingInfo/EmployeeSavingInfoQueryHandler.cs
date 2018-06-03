@@ -16,22 +16,22 @@ namespace HRSystem.Queries.EmployeeSavingInfo
         EmployeeSavingInfoQueryHandler : IRequestHandler<EmployeeSavingInfoQuery, EmployeeSavingInfoQueryResponse>
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public EmployeeSavingInfoQueryHandler(IEmployeeService employeeService, IAttributeService attributeService)
+        public EmployeeSavingInfoQueryHandler(IEmployeeService employeeService, IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(employeeService), employeeService);
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
             _employeeService = employeeService;
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task<EmployeeSavingInfoQueryResponse> Handle(EmployeeSavingInfoQuery request,
             CancellationToken cancellationToken)
         {
             var employee = await GetEmployee(request.IsCreate, request.Login);
-            var attributes = await _attributeService.GetAll().ConfigureAwait(false);
+            var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
             var employees = await _employeeService.GetAll().ConfigureAwait(false);
 
             return new EmployeeSavingInfoQueryResponse

@@ -11,7 +11,7 @@ using LiteGuard;
 
 namespace HRSystem.ActiveDirectory.Dal.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class AccountService : IAccountService
     {
         private readonly IActiveDirectoryFilterBuildingService _filterBuildingService;
         private readonly IActiveDirectoryDistinguishedNameBuilderService _distinguishedNameBuilderService;
@@ -20,7 +20,7 @@ namespace HRSystem.ActiveDirectory.Dal.Repositories
         private readonly IActiveDirectoryUserUpdatingInfoBuilderService _updatingInfoBuilderService;
         private readonly string _parentDistinguishedName;
 
-        public UserRepository(
+        public AccountService(
             IActiveDirectoryFilterBuildingService filterBuildingService,
             IActiveDirectoryDistinguishedNameBuilderService distinguishedNameBuilderService,
             IActiveDirectoryService activeDirectoryService,
@@ -44,12 +44,12 @@ namespace HRSystem.ActiveDirectory.Dal.Repositories
             _parentDistinguishedName = activeDirectorySettings.Paths[ActiveDirectoryConstants.Entities.User];
         }
 
-        public User GetByLogin(string login)
+        public Account GetByLogin(string login)
         {
             var filter = _filterBuildingService.BuildFilterForGettingUserByLogin(login);
             var entity = _activeDirectoryService.Find(_parentDistinguishedName, filter);
 
-            var user = Mapper.Map<User>(entity);
+            var user = Mapper.Map<Account>(entity);
             if (user == null)
             {
                 return null;
@@ -63,39 +63,39 @@ namespace HRSystem.ActiveDirectory.Dal.Repositories
             return user;
         }
 
-        public void Create(User user)
+        public void Create(Account account)
         {
             var password = _creationInfoBuilderService.GeneratePassword();
-            var attributes = _creationInfoBuilderService.BuildUserCreationInfo(user, password);
+            var attributes = _creationInfoBuilderService.BuildUserCreationInfo(account, password);
             _activeDirectoryService.Create(
-                GetOfficeDistinguishedNameByLocation(user.Office),
-                user.FullName,
+                GetOfficeDistinguishedNameByLocation(account.Office),
+                account.FullName,
                 attributes.ToArray());
         }
 
-        public void Update(User user)
+        public void Update(Account account)
         {
-            var oldUser = GetByLogin(user.Login);
-            user.DistinguishedName = oldUser.DistinguishedName;
+            var oldUser = GetByLogin(account.Login);
+            account.DistinguishedName = oldUser.DistinguishedName;
 
-            var updatingInfo = _updatingInfoBuilderService.BuildUserUpdatingInfo(user, oldUser).ToArray();
+            var updatingInfo = _updatingInfoBuilderService.BuildUserUpdatingInfo(account, oldUser).ToArray();
             if (!updatingInfo.Any())
             {
                 return;
             }
 
-            _activeDirectoryService.Update(user.DistinguishedName, updatingInfo);
-            UpdateDistinguishedName(user, oldUser);
+            _activeDirectoryService.Update(account.DistinguishedName, updatingInfo);
+            UpdateDistinguishedName(account, oldUser);
         }
 
-        public User GetByDistinguishedName(string distinguishedName)
+        public Account GetByDistinguishedName(string distinguishedName)
         {
             var filter =
                 _filterBuildingService.BuildFilterForGettingByDistinguishedName(ActiveDirectoryConstants.Entities.User, distinguishedName);
             var path = _filterBuildingService.BuildPathForGettingByDistinguishedName(distinguishedName);
             var result = _activeDirectoryService.Find(path, filter);
             
-            return Mapper.Map<User>(result);
+            return Mapper.Map<Account>(result);
         }
 
         private string GetOfficeDistinguishedNameByLocation(string location)
@@ -113,34 +113,34 @@ namespace HRSystem.ActiveDirectory.Dal.Repositories
             return location.Split(',').FirstOrDefault() ?? string.Empty;
         }
 
-        private void UpdateDistinguishedName(User user, User oldUser)
+        private void UpdateDistinguishedName(Account account, Account oldAccount)
         {
-            var newName = user.FullName;
-            if (NeedUpdateDistinguishedName(user, oldUser.FullName, newName))
+            var newName = account.FullName;
+            if (NeedUpdateDistinguishedName(account, oldAccount.FullName, newName))
             {
-                user.DistinguishedName = _activeDirectoryService.UpdateDistinguishedName(
-                    user.DistinguishedName,
-                    GetOfficeDistinguishedNameByLocation(user.Office),
+                account.DistinguishedName = _activeDirectoryService.UpdateDistinguishedName(
+                    account.DistinguishedName,
+                    GetOfficeDistinguishedNameByLocation(account.Office),
                     newName);
             }
         }
 
-        private bool NeedUpdateDistinguishedName(User user, string oldName, string newName)
+        private bool NeedUpdateDistinguishedName(Account account, string oldName, string newName)
         {
             var parentDistinguishedName =
-                _distinguishedNameBuilderService.GetParentDirectoryFromDistinguishedName(user.DistinguishedName);
-            var officeNotEquals = GetOfficeDistinguishedNameByLocation(user.Office) != parentDistinguishedName;
+                _distinguishedNameBuilderService.GetParentDirectoryFromDistinguishedName(account.DistinguishedName);
+            var officeNotEquals = GetOfficeDistinguishedNameByLocation(account.Office) != parentDistinguishedName;
             var nameNotEquals = newName != oldName;
 
             return officeNotEquals || nameNotEquals;
         }
         
-        public IEnumerable<User> GetUsersUpdatedFrom(DateTime from)
+        public IEnumerable<Account> GetUsersUpdatedFrom(DateTime from)
         {
             var filter = _filterBuildingService.BuildFilterForGettingUsersUpdatedFromDate(
                 from.ConvertToActiveDirectoryString());
             var result = _activeDirectoryService.FindEntities(_parentDistinguishedName, filter);
-            return Mapper.Map<IEnumerable<User>>(result);
+            return Mapper.Map<IEnumerable<Account>>(result);
         }
     }
 }

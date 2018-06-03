@@ -8,38 +8,38 @@ namespace HRSystem.ActiveDirectory.Dal.Services
 {
     public class ActiveDirectoryUserUpdatingInfoBuilderService : IActiveDirectoryUserUpdatingInfoBuilderService
     {
-        public IEnumerable<DirectoryAttributeModification> BuildUserUpdatingInfo(User updatedUser, User oldUser)
+        public IEnumerable<DirectoryAttributeModification> BuildUserUpdatingInfo(Account updatedAccount, Account oldAccount)
         {
             var modifications = new List<DirectoryAttributeModification>();
             modifications.AddModificationIfDataChanged(
                 ActiveDirectoryConstants.EntityAttributes.DisplayName,
-                updatedUser.FullName,
-                oldUser.FullName,
+                updatedAccount.FullName,
+                oldAccount.FullName,
                 u => u);
-            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.FirstName, updatedUser.FirstName,
-                oldUser.FirstName, u => u);
-            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.LastName, updatedUser.LastName,
-                oldUser.LastName, u => u);
+            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.FirstName, updatedAccount.FirstName,
+                oldAccount.FirstName, u => u);
+            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.LastName, updatedAccount.LastName,
+                oldAccount.LastName, u => u);
 
-            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.Email, updatedUser.Email, oldUser.Email,
+            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.Email, updatedAccount.Email, oldAccount.Email,
                 u => u);
-            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.Phone, updatedUser.Phone, oldUser.Phone,
+            modifications.AddModificationIfDataChanged(ActiveDirectoryConstants.EntityAttributes.Phone, updatedAccount.Phone, oldAccount.Phone,
                 u => u);
 
             modifications.AddModificationIfDataChanged(
                 ActiveDirectoryConstants.EntityAttributes.Manager,
-                updatedUser,
-                oldUser,
+                updatedAccount,
+                oldAccount,
                 u => u.ManagerDistinguishedName);
             modifications.AddModificationIfDataChanged(
                 ActiveDirectoryConstants.EntityAttributes.Office,
-                updatedUser,
-                oldUser,
+                updatedAccount,
+                oldAccount,
                 u => u.Office);
             modifications.AddModificationIfDataChanged(
                 ActiveDirectoryConstants.EntityAttributes.Job,
-                updatedUser,
-                oldUser,
+                updatedAccount,
+                oldAccount,
                 u => u.JobTitle);
 
             return modifications;

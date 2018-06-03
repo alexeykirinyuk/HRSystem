@@ -82,35 +82,6 @@ namespace HRSystem.ActiveDirectory.Services.Requests
             return distinguishedName;
         }
 
-        public void Update(string id, DirectoryAttributeOperation operation, string attributeName, params string[] attributeValues)
-        {
-            _requestService.MakeModifyRequest(id, operation, attributeName, attributeValues.Cast<object>().ToArray());
-        }
-
-        public void UpdateSafe(
-            string distinguishedName,
-            DirectoryAttributeOperation operation,
-            string attributeName,
-            params string[] attributeValues)
-        {
-            try
-            {
-                Update(distinguishedName, operation, attributeName, attributeValues);
-            }
-            catch (DirectoryOperationException exception)
-            {
-                var resultCode = exception.Response.ResultCode;
-                _logger.Warn(exception, $"Error while updating active directory entity, result code: '{resultCode}'");
-
-                if (resultCode == ResultCode.EntryAlreadyExists || resultCode == ResultCode.UnwillingToPerform)
-                {
-                    return;
-                }
-
-                throw;
-            }
-        }
-
         public void Update(string id, IEnumerable<DirectoryAttributeModification> modifications)
         {
             _requestService.MakeModifyRequest(id, modifications);

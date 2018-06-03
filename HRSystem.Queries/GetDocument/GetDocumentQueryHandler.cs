@@ -9,20 +9,20 @@ namespace HRSystem.Queries.GetDocument
     public class GetDocumentQueryHandler : IRequestHandler<GetDocumentQuery, GetDocumentQueryResponse>
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
         private readonly IDocumentService _documentService;
 
-        public GetDocumentQueryHandler(IEmployeeService employeeService, IAttributeService attributeService, IDocumentService documentService)
+        public GetDocumentQueryHandler(IEmployeeService employeeService, IAttributeInfoService attributeInfoService, IDocumentService documentService)
         {
             _employeeService = employeeService;
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
             _documentService = documentService;
         }
 
         public async Task<GetDocumentQueryResponse> Handle(GetDocumentQuery request, CancellationToken cancellationToken)
         {
             var employee = await _employeeService.GetByLogin(request.EmployeeLogin);
-            var attribute = await _attributeService.GetById(request.AttributeInfoId);
+            var attribute = await _attributeInfoService.GetById(request.AttributeInfoId);
             if (employee == null)
             {
                 throw new ValidationException("Employee not found.");
@@ -40,7 +40,7 @@ namespace HRSystem.Queries.GetDocument
 
             return new GetDocumentQueryResponse
             {
-                Document = _documentService.LoadAsync(employee, attribute)
+                Document = _documentService.Load(employee, attribute)
             };
         }
     }

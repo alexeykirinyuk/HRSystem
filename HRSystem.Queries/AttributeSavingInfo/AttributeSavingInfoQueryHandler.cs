@@ -9,13 +9,13 @@ namespace HRSystem.Queries.AttributeSavingInfo
 {
     public class AttributeSavingInfoQueryHandler : IRequestHandler<AttributeSavingInfoQuery, AttributeSavingInfoQueryResponse>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public AttributeSavingInfoQueryHandler(IAttributeService attributeService)
+        public AttributeSavingInfoQueryHandler(IAttributeInfoService attributeInfoService)
         {
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
             
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task<AttributeSavingInfoQueryResponse> Handle(AttributeSavingInfoQuery request, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ namespace HRSystem.Queries.AttributeSavingInfo
                     Type = AttributeType.String
                 };
             
-            var attribute = await _attributeService.GetById(request.Id.Value).ConfigureAwait(false);
+            var attribute = await _attributeInfoService.GetById(request.Id.Value).ConfigureAwait(false);
             return new AttributeSavingInfoQueryResponse
             {
                 Name = attribute.Name,

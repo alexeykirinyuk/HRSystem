@@ -15,18 +15,7 @@ namespace HRSystem.Core
         
         Task Add(Employee employee);
 
-        Task Update(
-            string login,
-            string firstName,
-            string lastName,
-            string email,
-            string phone,
-            string jobTitle,
-            string office,
-            string managerLogin,
-            List<AttributeBase> attributes);
-        
-        Task<IEnumerable<AttributeInfo>> GetAttributes();
+        Task Update(Employee employee);
         
         Task<bool> IsExists(string login);
         

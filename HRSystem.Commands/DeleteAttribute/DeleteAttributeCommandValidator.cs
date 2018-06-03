@@ -8,16 +8,16 @@ namespace HRSystem.Commands.DeleteAttribute
 {
     public class DeleteAttributeCommandValidator : IValidator<DeleteAttributeCommand>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public DeleteAttributeCommandValidator(IAttributeService attributeService)
+        public DeleteAttributeCommandValidator(IAttributeInfoService attributeInfoService)
         {
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task Validate(List<ValidationFailure> list, DeleteAttributeCommand request)
         {
-            if (!await _attributeService.IsExists(request.AttributeInfoId))
+            if (!await _attributeInfoService.IsExists(request.AttributeInfoId))
             {
                 list.Add("Attribute not found.");
             }

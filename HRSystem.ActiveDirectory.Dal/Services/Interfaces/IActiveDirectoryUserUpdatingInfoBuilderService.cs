@@ -6,6 +6,6 @@ namespace HRSystem.ActiveDirectory.Dal.Services.Interfaces
 {
     public interface IActiveDirectoryUserUpdatingInfoBuilderService
     {
-        IEnumerable<DirectoryAttributeModification> BuildUserUpdatingInfo(User updatedUser, User oldUser);
+        IEnumerable<DirectoryAttributeModification> BuildUserUpdatingInfo(Account updatedAccount, Account oldAccount);
     }
 }

@@ -16,7 +16,7 @@ namespace HRSystem.ActiveDirectory.Dal.Mapping
 
         private void ConfigureMapping()
         {
-            CreateMap<SearchResultEntry, User>().ConvertUsing<ActiveDirectoryUserConverter>();
+            CreateMap<SearchResultEntry, Account>().ConvertUsing<ActiveDirectoryUserConverter>();
         }
     }
 }

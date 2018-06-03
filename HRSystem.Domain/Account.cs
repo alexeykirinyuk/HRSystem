@@ -1,6 +1,6 @@
 ﻿namespace HRSystem.Domain
 {
-    public class User
+    public class Account
     {
         public string DistinguishedName { get; set; }
         public string Login { get; set; }
@@ -13,7 +13,7 @@
         public string Office { get; set; }
 
         public string ManagerDistinguishedName { get; set; }
-        public virtual User Manager { get; set; }
+        public virtual Account Manager { get; set; }
 
         public Employee ToEmployee()
         {

@@ -7,17 +7,17 @@ namespace HRSystem.Commands.DeleteAttribute
 {
     public class DeleteAttributeCommandHandler : IRequestHandler<DeleteAttributeCommand>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public DeleteAttributeCommandHandler(IAttributeService attributeService)
+        public DeleteAttributeCommandHandler(IAttributeInfoService attributeInfoService)
         {
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task Handle(DeleteAttributeCommand request, CancellationToken cancellationToken)
         {
-            var attributeInfo = await _attributeService.GetById(request.AttributeInfoId);
-            await _attributeService.Delete(attributeInfo);
+            var attributeInfo = await _attributeInfoService.GetById(request.AttributeInfoId);
+            await _attributeInfoService.Delete(attributeInfo);
         }
     }
 }

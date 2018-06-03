@@ -9,18 +9,18 @@ namespace HRSystem.Queries.AttributeQuery
 {
     public class AttributeQueryHandler : IRequestHandler<AttributeQuery, AttributeQueryResponse>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public AttributeQueryHandler(IAttributeService attributeService)
+        public AttributeQueryHandler(IAttributeInfoService attributeInfoService)
         {
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task<AttributeQueryResponse> Handle(AttributeQuery request, CancellationToken cancellationToken)
         {
-            var attributes = await _attributeService.GetAll().ConfigureAwait(false);
+            var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
             
             return new AttributeQueryResponse
             {

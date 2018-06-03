@@ -11,15 +11,15 @@ namespace HRSystem.Commands.SaveEmployee
     public class SaveEmployeeCommandValidator : IValidator<SaveEmployeeCommand>
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public SaveEmployeeCommandValidator(IEmployeeService employeeService, IAttributeService attributeService)
+        public SaveEmployeeCommandValidator(IEmployeeService employeeService, IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(employeeService), employeeService);
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
             _employeeService = employeeService;
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task Validate(List<ValidationFailure> list, SaveEmployee.SaveEmployeeCommand request)
@@ -81,7 +81,7 @@ namespace HRSystem.Commands.SaveEmployee
 
         private async Task CheckAttribute(List<ValidationFailure> list, EmployeeAttribute attribute)
         {
-            if (!await _attributeService.IsExists(attribute.AttributeInfoId))
+            if (!await _attributeInfoService.IsExists(attribute.AttributeInfoId))
             {
                 list.Add("Attribute with same id wasn't found.");
             }

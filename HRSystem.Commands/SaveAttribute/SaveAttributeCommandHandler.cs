@@ -10,28 +10,28 @@ namespace HRSystem.Commands.SaveAttribute
 {
     public class SaveAttributeCommandHandler : IRequestHandler<SaveAttribute.SaveAttributeCommand>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public SaveAttributeCommandHandler(IAttributeService attributeService)
+        public SaveAttributeCommandHandler(IAttributeInfoService attributeInfoService)
         {
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task Handle(SaveAttributeCommand request, CancellationToken cancellationToken)
         {
             if (request.Id.HasValue)
             {
-                var attribute = await _attributeService.GetById(request.Id.Value);
+                var attribute = await _attributeInfoService.GetById(request.Id.Value);
                 attribute.Name = request.Name;
                 attribute.Type = request.Type;
                 
-                await _attributeService.Update(attribute);
+                await _attributeInfoService.Update(attribute);
             }
             else
             {
-                await _attributeService.Create(new AttributeInfo
+                await _attributeInfoService.Create(new AttributeInfo
                 {
                     Name = request.Name,
                     Type = request.Type

@@ -22,36 +22,30 @@ namespace HRSystem.Domain
 
         public virtual List<AttributeBase> Attributes { get; set; }
 
-        public void Update(string firstName,
-            string lastName,
-            string email,
-            string phone,
-            string jobTitle,
-            string office,
-            string managerLogin,
-            List<AttributeBase> attributes)
+        public void Update(Employee employee)
         {
             var withoutChanges =
-                FirstName == firstName &&
-                LastName == lastName &&
-                Email == email &&
-                JobTitle == jobTitle &&
-                Office == office &&
-                ManagerLogin == managerLogin;
+                FirstName == employee.FirstName &&
+                LastName == employee.LastName &&
+                Email == employee.Email &&
+                JobTitle == employee.JobTitle &&
+                Office == employee.Office &&
+                ManagerLogin == employee.ManagerLogin;
+            
             if (!withoutChanges)
             {
                 LastModified = DateTime.UtcNow;
             }
             
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Phone = phone;
-            JobTitle = jobTitle;
-            Office = office;
-            ManagerLogin = managerLogin;
+            FirstName = employee.FirstName;
+            LastName = employee.LastName;
+            Email = employee.Email;
+            Phone = employee.Phone;
+            JobTitle = employee.JobTitle;
+            Office = employee.Office;
+            ManagerLogin = employee.ManagerLogin;
 
-            foreach (var attr in attributes)
+            foreach (var attr in employee.Attributes)
             {
                 var singleAttribute = Attributes.SingleOrDefault(currentAttribute =>
                     currentAttribute.AttributeInfoId == attr.AttributeInfoId);
@@ -67,12 +61,12 @@ namespace HRSystem.Domain
             }
 
             Attributes.RemoveAll(currentAttribute =>
-                attributes.All(a => a.AttributeInfoId != currentAttribute.AttributeInfoId));
+                employee.Attributes.All(a => a.AttributeInfoId != currentAttribute.AttributeInfoId));
         }
 
-        public User ToUser(string managerDistinguishedName)
+        public Account ToUser(string managerDistinguishedName)
         {
-            return new User
+            return new Account
             {
                 Email = Email,
                 FirstName = FirstName,
@@ -83,24 +77,6 @@ namespace HRSystem.Domain
                 Office = Office,
                 Phone = Phone
             };
-        }
-
-        public bool ContainsText(string searchFilter)
-        {
-            var result = false;
-            result |= ContainsIfNotNull(FullName, searchFilter);
-            result |= ContainsIfNotNull(JobTitle, searchFilter);
-            result |= ContainsIfNotNull(Login, searchFilter);
-            result |= ContainsIfNotNull(Email, searchFilter);
-            result |= ContainsIfNotNull(Office, searchFilter);
-            result |= ContainsIfNotNull(Manager?.FullName, searchFilter);
-
-            return result;
-        }
-
-        private bool ContainsIfNotNull(string property, string searchFilter)
-        {
-            return property != null && property.Contains(searchFilter);
         }
     }
 }

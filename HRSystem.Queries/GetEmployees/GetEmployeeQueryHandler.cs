@@ -14,17 +14,17 @@ namespace HRSystem.Queries.GetEmployees
     public class GetEmployeeQueryHandler : IRequestHandler<GetEmployeesQuery, GetEmployeesQueryResponse>
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
         public GetEmployeeQueryHandler(
             IEmployeeService employeeService,
-            IAttributeService attributeService)
+            IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(employeeService), employeeService);
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
             _employeeService = employeeService;
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task<GetEmployeesQueryResponse> Handle(GetEmployeesQuery request, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ namespace HRSystem.Queries.GetEmployees
                 employeeEnumerable = await _employeeService.GetAll();
             }
             
-            var attributes = await _attributeService.GetAll().ConfigureAwait(false);
+            var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
 
             return new GetEmployeesQueryResponse
             {

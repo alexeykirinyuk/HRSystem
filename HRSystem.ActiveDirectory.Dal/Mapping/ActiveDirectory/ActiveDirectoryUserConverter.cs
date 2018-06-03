@@ -2,27 +2,28 @@
 using AutoMapper;
 using HRSystem.ActiveDirectory.Extensions;
 using HRSystem.Domain;
+using static HRSystem.ActiveDirectory.ActiveDirectoryConstants;
 
 namespace HRSystem.ActiveDirectory.Dal.Mapping.ActiveDirectory
 {
-    internal sealed class ActiveDirectoryUserConverter : ITypeConverter<SearchResultEntry, User>
+    internal sealed class ActiveDirectoryUserConverter : ITypeConverter<SearchResultEntry, Account>
     {
-        public User Convert(SearchResultEntry source, User destination, ResolutionContext context)
+        public Account Convert(SearchResultEntry source, Account destination, ResolutionContext context)
         {
             if (destination == null)
             {
-                destination = new User();
+                destination = new Account();
             }
 
-            destination.DistinguishedName = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.DistinguishedName);
-            destination.Login = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.AccountName);
-            destination.FirstName = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.FirstName);
-            destination.LastName = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.LastName);
-            destination.Email = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.Email);
-            destination.Phone = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.Phone);
-            destination.Office = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.Office);
-            destination.ManagerDistinguishedName = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.Manager);
-            destination.JobTitle = source.GetPropertyValue(ActiveDirectoryConstants.EntityAttributes.Job);
+            destination.DistinguishedName = source.GetPropertyValue(EntityAttributes.DistinguishedName);
+            destination.Login = source.GetPropertyValue(EntityAttributes.AccountName);
+            destination.FirstName = source.GetPropertyValue(EntityAttributes.FirstName);
+            destination.LastName = source.GetPropertyValue(EntityAttributes.LastName);
+            destination.Email = source.GetPropertyValue(EntityAttributes.Email);
+            destination.Phone = source.GetPropertyValue(EntityAttributes.Phone);
+            destination.Office = source.GetPropertyValue(EntityAttributes.Office);
+            destination.ManagerDistinguishedName = source.GetPropertyValue(EntityAttributes.Manager);
+            destination.JobTitle = source.GetPropertyValue(EntityAttributes.Job);
 
             return destination;
         }

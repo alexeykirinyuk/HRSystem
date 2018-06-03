@@ -15,14 +15,6 @@ namespace HRSystem.ActiveDirectory.Services.Requests.Interfaces
 
         string Create(string path, string name, DirectoryAttribute[] attributes);
 
-        void Update(string id, DirectoryAttributeOperation operation, string attributeName, params string[] attributeValues);
-
-        void UpdateSafe(
-            string distinguishedName,
-            DirectoryAttributeOperation operation,
-            string attributeName,
-            params string[] attributeValues);
-
         void Update(string id, IEnumerable<DirectoryAttributeModification> modifications);
 
         string UpdateDistinguishedName(string oldDistinguishedName, string parentDistinguishedName, string name);

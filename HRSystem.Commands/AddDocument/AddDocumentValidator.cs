@@ -9,16 +9,16 @@ namespace HRSystem.Commands.AddDocument
     public class AddDocumentValidator : IValidator<AddDocumentCommand>
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
         private readonly IDocumentService _documentService;
 
         public AddDocumentValidator(
             IEmployeeService employeeService, 
-            IAttributeService attributeService, 
+            IAttributeInfoService attributeInfoService, 
             IDocumentService documentService)
         {
             _employeeService = employeeService;
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
             _documentService = documentService;
         }
         
@@ -38,7 +38,7 @@ namespace HRSystem.Commands.AddDocument
 
         private async Task CheckAttributeInfo(List<ValidationFailure> list, AddDocumentCommand request)
         {
-            var attribute = await _attributeService.GetById(request.AttributeInfoId);
+            var attribute = await _attributeInfoService.GetById(request.AttributeInfoId);
             if (attribute == null)
             {
                 list.Add("Attribute not found.");

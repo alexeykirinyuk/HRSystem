@@ -27,36 +27,26 @@ namespace HRSystem.Commands.SaveEmployee
         {
             var attributes = request.Attributes
                 .Select(a => _createAttributeService.CreateAttribute(a.AttributeInfoId, a.Value, a.Type)).ToList();
+            var employee = new Employee
+            {
+                Login = request.Login,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                ManagerLogin = request.ManagerLogin,
+                Office = request.Office,
+                Phone = request.Phone,
+                JobTitle = request.JobTitle,
+                Attributes = attributes
+            };
             
             if (request.IsCreateCommand)
             {
-                var employee = new Employee
-                {
-                    Login = request.Login,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    ManagerLogin = request.ManagerLogin,
-                    Office = request.Office,
-                    Phone = request.Phone,
-                    JobTitle = request.JobTitle,
-                    Attributes = attributes
-                };
-
                 await _employeeService.Add(employee);
             }
             else
             {
-                await _employeeService.Update(
-                    login: request.Login,
-                    firstName: request.FirstName,
-                    lastName: request.LastName,
-                    email: request.Email,
-                    phone: request.Phone,
-                    jobTitle: request.JobTitle,
-                    office: request.Office,
-                    managerLogin: request.ManagerLogin,
-                    attributes: attributes).ConfigureAwait(false);
+                await _employeeService.Update(employee).ConfigureAwait(false);
             }
         }
     }

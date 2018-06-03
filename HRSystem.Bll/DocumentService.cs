@@ -32,7 +32,7 @@ namespace HRSystem.Bll
             }
         }
 
-        public Document LoadAsync(Employee employee, AttributeInfo attributeInfo)
+        public Document Load(Employee employee, AttributeInfo attributeInfo)
         {
             var path = GetPath(employee, attributeInfo);
             if (string.IsNullOrEmpty(path))

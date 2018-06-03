@@ -37,8 +37,7 @@ namespace HRSystem.ActiveDirectory.Services.Connection
                 SessionOptions =
                 {
                     SaslMethod = _settings.SaslMethod,
-                    ProtocolVersion = _settings.ProtocolVersion,
-                    VerifyServerCertificate = (connection, certificate) => true
+                    ProtocolVersion = _settings.ProtocolVersion
                 }
             };
 

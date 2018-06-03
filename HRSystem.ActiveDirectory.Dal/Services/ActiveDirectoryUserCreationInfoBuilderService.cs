@@ -22,30 +22,30 @@ namespace HRSystem.ActiveDirectory.Dal.Services
             _settings = settings;
         }
 
-        public IEnumerable<DirectoryAttribute> BuildUserCreationInfo(User user, string password)
+        public IEnumerable<DirectoryAttribute> BuildUserCreationInfo(Account account, string password)
         {
             var list = new List<DirectoryAttribute>
             {
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Name, user.FullName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.DisplayName, user.FullName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.AccountName, user.Login),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.FirstName, user.FirstName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.LastName, user.LastName),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Name, account.FullName),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.DisplayName, account.FullName),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.AccountName, account.Login),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.FirstName, account.FirstName),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.LastName, account.LastName),
                 new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Type, ActiveDirectoryConstants.Entities.User),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Email, user.Email),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Job, user.JobTitle),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Office, user.Office),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Phone, user.Phone),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Email, account.Email),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Job, account.JobTitle),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Office, account.Office),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Phone, account.Phone),
                 new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserAccountControl, ActiveDirectoryConstants.EntityAttributes.UserAccountControlValue),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserPrincipalName, $"{user.Login}@{_settings.Domain}"),
+                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserPrincipalName, $"{account.Login}@{_settings.Domain}"),
                 new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserMustChangePassword,
                     ActiveDirectoryConstants.EntityAttributes.UserNotMustChangePasswordValue),
 //                new DirectoryAttribute(EntityAttributes.Password, GetFormattedPasswordAsBytes(password))
             };
 
-            if (!string.IsNullOrEmpty(user.ManagerDistinguishedName))
+            if (!string.IsNullOrEmpty(account.ManagerDistinguishedName))
             {
-                list.Add(new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Manager, user.ManagerDistinguishedName));
+                list.Add(new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Manager, account.ManagerDistinguishedName));
             }
 
             return list;

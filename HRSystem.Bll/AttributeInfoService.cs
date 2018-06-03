@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRSystem.Bll
 {
-    public class AttributeService : IAttributeService
+    public class AttributeInfoService : IAttributeInfoService
     {
         private readonly HrSystemDb _db;
 
-        public AttributeService(HrSystemDb db)
+        public AttributeInfoService(HrSystemDb db)
         {
             ArgumentHelper.EnsureNotNull(nameof(db), db);
             
@@ -26,9 +26,9 @@ namespace HRSystem.Bll
             return await _db.AttributeInfos.ToArrayAsync().ConfigureAwait(false);
         }
 
-        public async Task<bool> IsExists(int attributeAttributeInfoId)
+        public async Task<bool> IsExists(int attributeInfoId)
         {
-            return await _db.AttributeInfos.AnyAsync(a => a.Id == attributeAttributeInfoId).ConfigureAwait(false);
+            return await _db.AttributeInfos.AnyAsync(a => a.Id == attributeInfoId).ConfigureAwait(false);
         }
 
         public async Task<bool> IsExists(string name)

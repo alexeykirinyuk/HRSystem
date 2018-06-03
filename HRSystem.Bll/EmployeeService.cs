@@ -16,17 +16,17 @@ namespace HRSystem.Bll
     public class EmployeeService : IEmployeeService
     {
         private readonly HrSystemDb _db;
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountService _accountService;
         private readonly IDocumentService _documentService;
 
-        public EmployeeService(HrSystemDb hrSystemDb, IUserRepository userRepository, IDocumentService documentService)
+        public EmployeeService(HrSystemDb hrSystemDb, IAccountService accountService, IDocumentService documentService)
         {
             ArgumentHelper.EnsureNotNull(nameof(hrSystemDb), hrSystemDb);
-            ArgumentHelper.EnsureNotNull(nameof(userRepository), userRepository);
+            ArgumentHelper.EnsureNotNull(nameof(accountService), accountService);
             ArgumentHelper.EnsureNotNull(nameof(documentService), documentService);
 
             _db = hrSystemDb;
-            _userRepository = userRepository;
+            _accountService = accountService;
             _documentService = documentService;
         }
 
@@ -86,31 +86,11 @@ namespace HRSystem.Bll
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task Update(
-            string login,
-            string firstName,
-            string lastName,
-            string email,
-            string phone,
-            string jobTitle,
-            string office,
-            string managerLogin,
-            List<AttributeBase> attributes)
+        public async Task Update(Employee employee)
         {
-            ArgumentHelper.EnsureNotNullOrEmpty(nameof(login), login);
-            ArgumentHelper.EnsureNotNullOrEmpty(nameof(firstName), firstName);
-            ArgumentHelper.EnsureNotNullOrEmpty(nameof(lastName), lastName);
-
-            var employee = await _db.Employees.Include(e => e.Manager).Include(e => e.Attributes).GetByLogin(login);
-            employee.Update(
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phone: phone,
-                jobTitle: jobTitle,
-                office: office,
-                managerLogin: managerLogin,
-                attributes: attributes);
+            var employeeEntity = await _db.Employees.Include(e => e.Manager).Include(e => e.Attributes)
+                .GetByLogin(employee.Login);
+            employeeEntity.Update(employee);
             await _db.SaveChangesAsync();
         }
 
@@ -143,7 +123,7 @@ namespace HRSystem.Bll
         public async Task SyncWithActiveDirectory(DateTime fromDate)
         {
             var employeesLastUpdated = GetEmployeesUpdatedBetweenDates(fromDate).ToArray();
-            var usersLastUpdated = _userRepository.GetUsersUpdatedFrom(fromDate).ToArray();
+            var usersLastUpdated = _accountService.GetUsersUpdatedFrom(fromDate).ToArray();
 
             SyncEmployeesToUsers(employeesLastUpdated);
             await SyncUsersToEmployees(usersLastUpdated, employeesLastUpdated);
@@ -160,20 +140,20 @@ namespace HRSystem.Bll
         {
             foreach (var lastUpdatedEmployee in employeesLastUpdated)
             {
-                var user = _userRepository.GetByLogin(lastUpdatedEmployee.Login);
+                var user = _accountService.GetByLogin(lastUpdatedEmployee.Login);
                 if (user == null)
                 {
                     CreateUser(lastUpdatedEmployee, employeesLastUpdated);
                 }
                 else
                 {
-                    User manager = null;
+                    Account manager = null;
                     if (lastUpdatedEmployee.Manager != null)
                     {
-                        manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                        manager = _accountService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
                     }
 
-                    _userRepository.Update(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+                    _accountService.Update(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
                 }
             }
         }
@@ -181,10 +161,10 @@ namespace HRSystem.Bll
         private void CreateUser(Employee lastUpdatedEmployee, IEnumerable<Employee> employeesLastUpdated)
         {
             var lastUpdatedEmployeeArray = employeesLastUpdated as Employee[] ?? employeesLastUpdated.ToArray();
-            User manager = null;
+            Account manager = null;
             if (lastUpdatedEmployee.Manager != null)
             {
-                manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                manager = _accountService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
             }
 
             if (lastUpdatedEmployee.Manager != null &&
@@ -192,13 +172,13 @@ namespace HRSystem.Bll
                 lastUpdatedEmployeeArray.ContainsByLogin(lastUpdatedEmployee.ManagerLogin))
             {
                 CreateUser(lastUpdatedEmployee.Manager, lastUpdatedEmployeeArray);
-                manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                manager = _accountService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
             }
 
-            _userRepository.Create(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+            _accountService.Create(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
         }
 
-        private async Task SyncUsersToEmployees(IEnumerable<User> usersLastUpdated,
+        private async Task SyncUsersToEmployees(IEnumerable<Account> usersLastUpdated,
             IEnumerable<Employee> employeesLastUpdated)
         {
             var lastUpdated = employeesLastUpdated as Employee[] ?? employeesLastUpdated.ToArray();
@@ -212,16 +192,18 @@ namespace HRSystem.Bll
                 }
                 else if (!lastUpdated.ContainsByLogin(userLastUpdated.Login))
                 {
-                    await Update(
-                        login: employee.Login,
-                        firstName: userLastUpdated.FirstName,
-                        lastName: userLastUpdated.LastName,
-                        email: userLastUpdated.Email,
-                        phone: userLastUpdated.Phone,
-                        jobTitle: userLastUpdated.JobTitle,
-                        office: userLastUpdated.Office,
-                        managerLogin: userLastUpdated.Manager?.Login,
-                        attributes: employee.Attributes);
+                    await Update(new Employee
+                    {
+                        Login = employee.Login,
+                        FirstName = userLastUpdated.FirstName,
+                        LastName = userLastUpdated.LastName,
+                        Email = userLastUpdated.Email,
+                        Phone = userLastUpdated.Phone,
+                        JobTitle = userLastUpdated.JobTitle,
+                        Office = userLastUpdated.Office,
+                        ManagerLogin = userLastUpdated.Manager?.Login,
+                        Attributes = employee.Attributes
+                    });
                 }
             }
         }

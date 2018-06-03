@@ -9,13 +9,13 @@ namespace HRSystem.Queries.AttributeSavingInfo
 {
     public class AttributeSavingInfoQueryValidator : IValidator<AttributeSavingInfoQuery>
     {
-        private readonly IAttributeService _attributeService;
+        private readonly IAttributeInfoService _attributeInfoService;
 
-        public AttributeSavingInfoQueryValidator(IAttributeService attributeService)
+        public AttributeSavingInfoQueryValidator(IAttributeInfoService attributeInfoService)
         {
-            ArgumentHelper.EnsureNotNull(nameof(attributeService), attributeService);
+            ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
-            _attributeService = attributeService;
+            _attributeInfoService = attributeInfoService;
         }
 
         public async Task Validate(List<ValidationFailure> list, AttributeSavingInfoQuery request)
@@ -25,7 +25,7 @@ namespace HRSystem.Queries.AttributeSavingInfo
                 return;
             }
 
-            if (!await _attributeService.IsExists(request.Id.Value))
+            if (!await _attributeInfoService.IsExists(request.Id.Value))
             {
                 list.Add("Attribute with same id wasn't found.");
             }
