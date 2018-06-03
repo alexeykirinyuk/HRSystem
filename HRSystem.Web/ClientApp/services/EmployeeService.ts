@@ -14,8 +14,13 @@ export class EmployeeService implements IEmployeeService {
 
     }
 
-    public async getAll(): Promise<GetAllEmployeesResponse> {
-        let response = await this.dataService.makeGetRequest<GetAllEmployeesResponse>(RequestUrls.GET_ALL_EMPLOYEES);
+    public async getAll(search?: string): Promise<GetAllEmployeesResponse> {
+        let postfix = StringHelper.isNullOrEmpty(search) ?
+            "" :
+            `?search=${search}`;
+
+        let response = await this.dataService.makeGetRequest<GetAllEmployeesResponse>(
+            `${RequestUrls.GET_ALL_EMPLOYEES}${postfix}`);
         return new GetAllEmployeesResponse(response);
     }
 
@@ -37,10 +42,6 @@ export class EmployeeService implements IEmployeeService {
         return this.dataService.makePostRequest(RequestUrls.SAVE_EMPLOYEE, new AddEmployeeParams(request));
     }
 
-    public isFileExists(employee: string, attributeInfoId: number) : Promise<boolean> {
-        return this.dataService.makeGetRequest<boolean>(`api/file/exists?employee=${employee}&attributeInfoId=${attributeInfoId}`);
-    }
-
     public upload(employee: string, attributeInfoId: number, file: any): void {
         let data = new FormData();
         data.append('employee', employee);
@@ -48,7 +49,11 @@ export class EmployeeService implements IEmployeeService {
         data.append('file', file);
 
         let request = new XMLHttpRequest();
-        request.open('POST', "http://localhost:5000/" + RequestUrls.UPLOAD_FILE);
+        request.open('POST', "http://localhost:5000/" + RequestUrls.UPLOAD_DOCUMENT);
         request.send(data);
+    }
+
+    deleteDocument(employeeLogin: string, attributeInfoId: number): Promise<void> {
+        return this.dataService.makeDeleteRequest(`${RequestUrls.DELETE_DOCUMENT}/${employeeLogin}/${attributeInfoId}`);
     }
 }

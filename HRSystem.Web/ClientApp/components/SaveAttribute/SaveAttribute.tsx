@@ -58,9 +58,10 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => this.hide()}>Close</Button>
+                <Button bsStyle="danger" onClick={() => this.delete()}>DELETE</Button>
+                <Button onClick={() => this.hide()}>CLOSE</Button>
                 <Button bsStyle="primary"
-                        onClick={() => this.clickSave()}>{this.state.id == null ? "Create" : "Update"}</Button>
+                        onClick={() => this.clickSave()}>{this.state.id == null ? "CREATE" : "UPDATE"}</Button>
             </Modal.Footer>
         </Modal>);
     }
@@ -111,6 +112,13 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
         }
 
         this.setState(this.getEmptyState(null, false));
+    }
+
+    private delete() {
+        this.props.service.deleteAttribute(this.state.id)
+            .then(() => {
+                this.hide();
+            });
     }
 
     private getEmptyState(id: number, show: boolean): ISaveAttributeState {

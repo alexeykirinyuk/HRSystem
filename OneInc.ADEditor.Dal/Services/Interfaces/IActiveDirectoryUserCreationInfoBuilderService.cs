@@ -6,7 +6,7 @@ namespace OneInc.ADEditor.Dal.Services.Interfaces
 {
     public interface IActiveDirectoryUserCreationInfoBuilderService
     {
-        IEnumerable<DirectoryAttribute> BuilUserCreationInfo(User user, string password);
+        IEnumerable<DirectoryAttribute> BuildUserCreationInfo(User user, string password);
 
         string GeneratePassword();
     }

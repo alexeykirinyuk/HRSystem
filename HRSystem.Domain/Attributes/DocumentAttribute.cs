@@ -2,18 +2,23 @@
 
 namespace HRSystem.Domain.Attributes
 {
-    public class DocumentAttribute : AttributeBase, IAttributeWithValue<string>
+    public class DocumentAttribute : AttributeBase, IAttributeWithValue<bool>
     {
-        public string Value { get; set; }
+        public bool Value { get; set; }
+
+        public DocumentAttribute(bool hasFile, Employee employee, AttributeInfo attributeInfo) : base(employee, attributeInfo)
+        {
+            Value = hasFile;
+        }
         
         public override string GetValueAsString()
         {
-            return Value ?? string.Empty;
+            return Value.ToString().ToLower();
         }
 
         public override void SetValueAsString(string value)
         {
-            Value = value;
+            Value = bool.Parse(value);
         }
     }
 }

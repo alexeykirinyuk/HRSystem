@@ -1,4 +1,8 @@
-import {ISaveAttributeParams, IAttributeService, IAttributeSavingInfoQueryResponse} from "../core/IAttributeService";
+import {
+    ISaveAttributeParams,
+    IAttributeService,
+    IAttributeSavingInfoQueryResponse,
+} from "../core/IAttributeService";
 import {IDataService} from "../core/IDataService";
 import {RequestUrls} from "./RequestUrls";
 import {GetAllAttributesResponse} from "../core/IEmployeeService";
@@ -15,9 +19,13 @@ export class AttributeService implements IAttributeService {
         return this.dataService.makePostRequest(RequestUrls.ADD_ATTRIBUTE, request);
     }
 
-    getSavingInfo(id?: number): Promise<IAttributeSavingInfoQueryResponse> {
+    public getSavingInfo(id?: number): Promise<IAttributeSavingInfoQueryResponse> {
         let idString = id != null ? id.toString() : StringHelper.EMPTY;
 
         return this.dataService.makeGetRequest(`${RequestUrls.GET_ATTRIBUTE_SAVING_INFO}/${idString}`);
+    }
+
+    public deleteAttribute(id: number): Promise<void> {
+        return this.dataService.makeDeleteRequest(`${RequestUrls.DELETE_ATTRIBUTE}/${id}`);
     }
 }

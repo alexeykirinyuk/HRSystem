@@ -25,9 +25,9 @@ namespace OneInc.ADEditor.Dal.Services
             _settings = settings;
         }
 
-        public IEnumerable<DirectoryAttribute> BuilUserCreationInfo(User user, string password)
+        public IEnumerable<DirectoryAttribute> BuildUserCreationInfo(User user, string password)
         {
-            return new List<DirectoryAttribute>
+            var list = new List<DirectoryAttribute>
             {
                 new DirectoryAttribute(EntityAttributes.Name, user.FullName),
                 new DirectoryAttribute(EntityAttributes.DisplayName, user.FullName),
@@ -39,13 +39,19 @@ namespace OneInc.ADEditor.Dal.Services
                 new DirectoryAttribute(EntityAttributes.Job, user.JobTitle),
                 new DirectoryAttribute(EntityAttributes.Office, user.Office),
                 new DirectoryAttribute(EntityAttributes.Phone, user.Phone),
-                new DirectoryAttribute(EntityAttributes.Manager, user.Manager?.DistinguishedName),
                 new DirectoryAttribute(EntityAttributes.UserAccountControl, EntityAttributes.UserAccountControlValue),
                 new DirectoryAttribute(EntityAttributes.UserPrincipalName, $"{user.Login}@{_settings.Domain}"),
                 new DirectoryAttribute(EntityAttributes.UserMustChangePassword,
                     EntityAttributes.UserNotMustChangePasswordValue),
-                new DirectoryAttribute(EntityAttributes.Password, GetFormattedPasswordAsBytes(password))
+//                new DirectoryAttribute(EntityAttributes.Password, GetFormattedPasswordAsBytes(password))
             };
+
+            if (!string.IsNullOrEmpty(user.ManagerDistinguishedName))
+            {
+                list.Add(new DirectoryAttribute(EntityAttributes.Manager, user.ManagerDistinguishedName));
+            }
+
+            return list;
         }
 
         private static byte[] GetFormattedPasswordAsBytes(string password)
@@ -60,12 +66,13 @@ namespace OneInc.ADEditor.Dal.Services
 
             GeneratePart(passwordArray, partLenght, 1, GetRandomSymbol);
             GeneratePart(passwordArray, partLenght, 2, () => char.ToUpper(GetRandomSymbol()));
-            GeneratePart(passwordArray, partLenght, 3, () => (char)('0' + Random.Next(10)));
+            GeneratePart(passwordArray, partLenght, 3, () => (char) ('0' + Random.Next(10)));
 
             return new string(passwordArray);
         }
 
-        private static void GeneratePart(IList<char> passwordArray, int partLenght, int partNumber, Func<char> getSymbolFunc)
+        private static void GeneratePart(IList<char> passwordArray, int partLenght, int partNumber,
+            Func<char> getSymbolFunc)
         {
             for (var i = partLenght * (partNumber - 1); i < partLenght * partNumber; i++)
             {

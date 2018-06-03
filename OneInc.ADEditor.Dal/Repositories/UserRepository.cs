@@ -51,7 +51,7 @@ namespace OneInc.ADEditor.Dal.Repositories
 
         public User GetByLogin(string login)
         {
-            var filter = _filterBuildingService.BuildFilterForGettingUserByPrincipalName(login);
+            var filter = _filterBuildingService.BuildFilterForGettingUserByLogin(login);
             var entity = _activeDirectoryService.Find(_parentDistinguishedName, filter);
 
             var user = Mapper.Map<User>(entity);
@@ -71,7 +71,7 @@ namespace OneInc.ADEditor.Dal.Repositories
         public void Create(User user)
         {
             var password = _creationInfoBuilderService.GeneratePassword();
-            var attributes = _creationInfoBuilderService.BuilUserCreationInfo(user, password);
+            var attributes = _creationInfoBuilderService.BuildUserCreationInfo(user, password);
             _activeDirectoryService.Create(
                 GetOfficeDistinguishedNameByLocation(user.Office),
                 user.FullName,
@@ -139,6 +139,7 @@ namespace OneInc.ADEditor.Dal.Repositories
 
             return officeNotEquals || nameNotEquals;
         }
+        
         public IEnumerable<User> GetUsersUpdatedFrom(DateTime from)
         {
             var filter = _filterBuildingService.BuildFilterForGettingUsersUpdatedFromDate(

@@ -8,4 +8,5 @@ export interface IEmployeeListState {
     showModal: boolean;
     isCreateModalType: boolean;
     selectedEmployeeLogin: string;
+    search: string;
 }

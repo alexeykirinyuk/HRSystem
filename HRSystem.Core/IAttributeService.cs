@@ -12,5 +12,6 @@ namespace HRSystem.Core
         Task Create(AttributeInfo attribute);
         Task Update(AttributeInfo attribute);
         Task<AttributeInfo> GetById(int id);
+        Task Delete(AttributeInfo attributeInfo);
     }
 }

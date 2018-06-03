@@ -21,7 +21,7 @@ namespace OneInc.ADEditor.ActiveDirectory
 
         public TechincalUserAuthenticationMode TechincalUserAuthenticationMode { get; set; }
 
-        public bool SecureSocketLayer { get; set; }
+        public string SaslMethod { get; set; }
 
         public int ProtocolVersion { get; set; }
     }

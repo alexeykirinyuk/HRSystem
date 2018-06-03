@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using HRSystem.Commands.DeleteAttribute;
 using HRSystem.Commands.SaveAttribute;
 using HRSystem.Common.Errors;
 using HRSystem.Common.Validation;
@@ -40,6 +41,20 @@ namespace HRSystem.Web.Controllers
             try
             {
                 await _mediator.Send(request).ConfigureAwait(false);
+                return Ok();
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.ToResponse());
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _mediator.Send(new DeleteAttributeCommand() {AttributeInfoId = id}).ConfigureAwait(false);
                 return Ok();
             }
             catch (ValidationException e)

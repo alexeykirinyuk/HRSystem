@@ -31,6 +31,18 @@ namespace HRSystem.Domain
             string managerLogin,
             List<AttributeBase> attributes)
         {
+            var withoutChanges =
+                FirstName == firstName &&
+                LastName == lastName &&
+                Email == email &&
+                JobTitle == jobTitle &&
+                Office == office &&
+                ManagerLogin == managerLogin;
+            if (!withoutChanges)
+            {
+                LastModified = DateTime.UtcNow;
+            }
+            
             FirstName = firstName;
             LastName = lastName;
             Email = email;
@@ -71,6 +83,24 @@ namespace HRSystem.Domain
                 Office = Office,
                 Phone = Phone
             };
+        }
+
+        public bool ContainsText(string searchFilter)
+        {
+            var result = false;
+            result |= ContainsIfNotNull(FullName, searchFilter);
+            result |= ContainsIfNotNull(JobTitle, searchFilter);
+            result |= ContainsIfNotNull(Login, searchFilter);
+            result |= ContainsIfNotNull(Email, searchFilter);
+            result |= ContainsIfNotNull(Office, searchFilter);
+            result |= ContainsIfNotNull(Manager?.FullName, searchFilter);
+
+            return result;
+        }
+
+        private bool ContainsIfNotNull(string property, string searchFilter)
+        {
+            return property != null && property.Contains(searchFilter);
         }
     }
 }

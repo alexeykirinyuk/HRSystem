@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using HRSystem.Domain.Attributes.Base;
 using HRSystem.Web.Dtos;
 
-namespace HRSystem.Queries.EmployeeQuery
+namespace HRSystem.Queries.GetEmployees
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class EmployeeQueryResponse
+    public class GetEmployeesQueryResponse
     {
         public ICollection<EmployeeDto> Employees { get; set; }
         

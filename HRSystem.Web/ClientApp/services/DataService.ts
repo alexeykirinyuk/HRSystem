@@ -1,5 +1,5 @@
 import {IDataService} from "../core/IDataService";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import {throws} from "assert";
 
 export class DataService implements IDataService {
@@ -19,6 +19,14 @@ export class DataService implements IDataService {
 
     public makePostRequest<T>(url: string, body: any, config?: AxiosRequestConfig): Promise<T> {
         return axios.post(this.castUrl(url), body, config)
+            .then(v => v.data)
+            .catch(e => {
+                throw e;
+            });
+    }
+
+    public makeDeleteRequest<T>(url: string): Promise<T> {
+        return axios.delete(url)
             .then(v => v.data)
             .catch(e => {
                 throw e;

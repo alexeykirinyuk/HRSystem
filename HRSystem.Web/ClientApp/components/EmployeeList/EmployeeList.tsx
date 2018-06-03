@@ -1,12 +1,13 @@
-import { IEmployeeListProps } from "./IEmployeeListProps";
-import { IEmployeeListState } from "./IEmployeeListState";
+import {IEmployeeListProps} from "./IEmployeeListProps";
+import {IEmployeeListState} from "./IEmployeeListState";
 import * as React from "react";
-import { Button, Table } from "react-bootstrap/lib";
-import { Spinner } from "../Spinner/Spinner";
-import { SaveEmployee } from "../SaveEmployee/SaveEmployee";
-import { StringHelper } from "../../helpers/StringHelper";
-import { Employee } from "../../models/Employee";
-import { AttributeType } from "../../models/AttributeType";
+import {Button, ControlLabel, FormControl, FormGroup, Image, Table} from "react-bootstrap/lib";
+import {Spinner} from "../Spinner/Spinner";
+import {SaveEmployee} from "../SaveEmployee/SaveEmployee";
+import {StringHelper} from "../../helpers/StringHelper";
+import {Employee} from "../../models/Employee";
+import {AttributeType} from "../../models/AttributeType";
+import {EventHelper} from "../../helpers/EventHelper";
 
 export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeListState> {
     public constructor(props: IEmployeeListProps) {
@@ -18,7 +19,8 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
             isLoading: true,
             showModal: false,
             isCreateModalType: true,
-            selectedEmployeeLogin: StringHelper.EMPTY
+            selectedEmployeeLogin: StringHelper.EMPTY,
+            search: StringHelper.EMPTY
         };
     }
 
@@ -29,15 +31,17 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
             (<tr key={e.login}>
                 <td>{e.fullName}</td>
                 <td>{e.email}</td>
+                <td>{e.office}</td>
                 <td>{e.phone}</td>
                 <td>{e.jobTitle}</td>
                 <td>{e.manager != null ? e.manager.fullName : ""}</td>
                 {this.getEmployeeAttributes(e)}
                 <td>
                     <Button
+                        bsStyle="success"
                         onClick={() =>
                             this.setState({showModal: true, isCreateModalType: false, selectedEmployeeLogin: e.login})}>
-                        Update employee</Button>
+                        UPDATE</Button>
                 </td>
             </tr>));
 
@@ -49,8 +53,19 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
                 isCreate={this.state.isCreateModalType}
                 login={this.state.selectedEmployeeLogin}/>
             <div>
-                <Button onClick={() => this.setState({showModal: true, isCreateModalType: true})}>
-                    Create employee</Button>
+                <Button bsStyle="success" onClick={() => this.setState({showModal: true, isCreateModalType: true})}>
+                    CREATE</Button>
+            </div>
+            <div>
+                <FormGroup>
+                    <FormControl
+                        width={"50%"}
+                        type="text"
+                        onChange={(event) => this.setState({search: EventHelper.getValue(event)})}
+                        placeholder="Enter search request"/>
+                    <Button bsStyle="primary" onClick={() => this.search()}>
+                        SEARCH</Button>
+                </FormGroup>
             </div>
             <div hidden={!this.state.isLoading}>
                 <Spinner/>
@@ -61,6 +76,7 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
                     <tr key="Headers">
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Office</th>
                         <th>Phone</th>
                         <th>Job Title</th>
                         <th>Manager</th>
@@ -82,7 +98,7 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
     }
 
     private async componentDidMountAsync(): Promise<void> {
-        let getAllEmployeesResponse = await this.props.employeeService.getAll();
+        let getAllEmployeesResponse = await this.props.employeeService.getAll(  );
         this.setState({
             employees: getAllEmployeesResponse.employees,
             attributes: getAllEmployeesResponse.attributes,
@@ -92,13 +108,27 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
 
     private getEmployeeAttributes(employee: Employee): JSX.Element[] {
         return this.state.attributes.map(attributeInfo => {
-            if (attributeInfo.type == AttributeType.Document) {
-                return <td key={attributeInfo.id}><Button href={`api/file/download/${employee.login}/${attributeInfo.id}`} target={"_blank"}>Download</Button></td>;
-            }
-
             let attributeBases = employee.attributes.filter(a => a.attributeInfo.id == attributeInfo.id);
+
+
             if (attributeBases.length > 0) {
-                return <td key={attributeInfo.id}>{attributeBases[0].value}</td>;
+                let attribute = attributeBases[0];
+                if (attributeInfo.type == AttributeType.Document) {
+                    console.log(`file Exists: ${attribute.value}`);
+                    return <td key={attributeInfo.id}>
+                        {
+                            attribute.value == "true" ?
+                                <Button
+                                    bsStyle="link"
+                                    href={`api/document/download/${employee.login}/${attributeInfo.id}`}
+                                    target={"_blank"}>
+                                    DOWNLOAD
+                                </Button> : null
+                        }
+                    </td>;
+                }
+
+                return <td key={attributeInfo.id}>{attribute.value}</td>;
             } else {
                 return <td key={attributeInfo.id}/>;
             }
@@ -108,5 +138,12 @@ export class EmployeeList extends React.Component<IEmployeeListProps, IEmployeeL
     private hideModal(): void {
         this.setState({showModal: false, isLoading: true});
         this.componentDidMountAsync().then();
+    }
+
+    private search() {
+        this.setState({isLoading: true});
+        this.props.employeeService.getAll(this.state.search).then((list) => {
+            this.setState({employees: list.employees, attributes: list.attributes, isLoading: false});
+        });
     }
 }

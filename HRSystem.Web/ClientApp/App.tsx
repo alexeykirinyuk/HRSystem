@@ -22,19 +22,25 @@ export const App = () =>
         <Navbar>
             <Navbar.Header>
                 <Navbar.Brand>
-                    <Link to="/">Employees</Link>
+                    <Link to="/">HR SYSTEM</Link>
                 </Navbar.Brand>
             </Navbar.Header>
             <Nav>
-                <LinkContainer to="/attributes">
+                <LinkContainer to="/list">
                     <NavItem eventKey={1}>
-                        Attributes
+                        Employee List
+                    </NavItem>
+                </LinkContainer>
+                <LinkContainer to="/attributes">
+                    <NavItem eventKey={2}>
+                        Attribute List
                     </NavItem>
                 </LinkContainer>
             </Nav>
         </Navbar>
         <Switch>
             <Route exact path="/" component={() => <EmployeeList employeeService={employeeService}/>}/>
+            <Route exact path="/list" component={() => <EmployeeList employeeService={employeeService}/>}/>
             <Route exact path="/attributes" component={() => <AttributeList service={attributeService}/>}/>
         </Switch>
     </div>;

@@ -105,11 +105,11 @@ export interface IEmployeeAttribute {
 }
 
 export interface IEmployeeService {
-    getAll(): Promise<GetAllEmployeesResponse>;
+    getAll(search?: string): Promise<GetAllEmployeesResponse>;
 
     getEmployeeSavingInfo(login: string, isCreate: boolean): Promise<EmployeeSavingInfoResponse>;
 
     save(request: ISaveEmployeeParams): Promise<void>;
 
-    isFileExists(employee: string, attributeInfoId: number) : Promise<boolean>;
+    deleteDocument(employeeLogin: string, attributeInfoId: number): Promise<void>;
 }

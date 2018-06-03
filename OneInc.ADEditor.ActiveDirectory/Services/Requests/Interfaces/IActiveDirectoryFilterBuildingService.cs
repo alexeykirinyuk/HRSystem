@@ -20,7 +20,7 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests.Interfaces
 
         string BuildFilterForGettingUserByEmail(string email);
 
-        string BuildFilterForGettingUserByPrincipalName(string principalName);
+        string BuildFilterForGettingUserByLogin(string principalName);
 
         string BuildFilterForGettingUsersByEmails(IEnumerable<string> emails);
 

@@ -17,24 +17,31 @@ namespace OneInc.ADEditor.Dal.Services
                 updatedUser.FullName,
                 oldUser.FullName,
                 u => u);
-            modifications.AddModificationIfDataChanged(EntityAttributes.FirstName, updatedUser.FirstName, oldUser.FirstName, u => u);
-            modifications.AddModificationIfDataChanged(EntityAttributes.LastName, updatedUser.LastName, oldUser.LastName, u => u);
+            modifications.AddModificationIfDataChanged(EntityAttributes.FirstName, updatedUser.FirstName,
+                oldUser.FirstName, u => u);
+            modifications.AddModificationIfDataChanged(EntityAttributes.LastName, updatedUser.LastName,
+                oldUser.LastName, u => u);
 
-            modifications.AddModificationIfDataChanged(EntityAttributes.Email, updatedUser.Email, oldUser.Email, u => u);
-            modifications.AddModificationIfDataChanged(EntityAttributes.Phone, updatedUser.Phone, oldUser.Phone, u => u);
+            modifications.AddModificationIfDataChanged(EntityAttributes.Email, updatedUser.Email, oldUser.Email,
+                u => u);
+            modifications.AddModificationIfDataChanged(EntityAttributes.Phone, updatedUser.Phone, oldUser.Phone,
+                u => u);
 
             modifications.AddModificationIfDataChanged(
                 EntityAttributes.Manager,
-                updatedUser.ManagerDistinguishedName,
-                oldUser.ManagerDistinguishedName);
+                updatedUser,
+                oldUser,
+                u => u.ManagerDistinguishedName);
             modifications.AddModificationIfDataChanged(
                 EntityAttributes.Office,
-                updatedUser.Office,
-                oldUser.Office);
+                updatedUser,
+                oldUser,
+                u => u.Office);
             modifications.AddModificationIfDataChanged(
                 EntityAttributes.Job,
-                updatedUser.JobTitle,
-                oldUser.JobTitle);
+                updatedUser,
+                oldUser,
+                u => u.JobTitle);
 
             return modifications;
         }

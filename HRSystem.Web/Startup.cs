@@ -13,7 +13,7 @@ using HRSystem.Core;
 using HRSystem.Data;
 using HRSystem.Infrastructure;
 using HRSystem.Queries.AttributeSavingInfo;
-using HRSystem.Queries.EmployeeQuery;
+using HRSystem.Queries.GetEmployees;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,7 +49,7 @@ namespace HRSystem.Web
             services.AddDbContext<HrSystemDb>(options => options.UseSqlServer(connectionString));
             services.AddMvc();
 
-            services.AddMediatR(typeof(EmployeeQuery), typeof(SaveEmployeeCommand));
+            services.AddMediatR(typeof(GetEmployeesQuery), typeof(SaveEmployeeCommand));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             
             ConfigureMapper();
@@ -109,8 +109,12 @@ namespace HRSystem.Web
             {
                 routeBuilder.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
+                    template: "api/{controller=Home}/{action=Index}/{id?}"
                 );
+
+                routeBuilder.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new {controller = "Home", action = "Index"});
             });
         }
     }

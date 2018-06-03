@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.Linq;
 using LiteGuard;
@@ -18,14 +19,15 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             _connectionService = connectionService;
         }
 
-        public SearchResponse MakeSearchRequest(string path, string filter, SearchScope scope, params string[] attributes)
+        public SearchResponse MakeSearchRequest(string path, string filter, SearchScope scope,
+            params string[] attributes)
         {
             using (var connection = _connectionService.OpenConnection())
             {
                 var request = new SearchRequest(path, filter, scope);
                 request.Attributes.AddRange(attributes);
 
-                return (SearchResponse)connection.SendRequest(request);
+                return (SearchResponse) connection.SendRequest(request);
             }
         }
 
@@ -34,8 +36,7 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             using (var connection = _connectionService.OpenConnection())
             {
                 var request = new AddRequest(id, attributes);
-
-                return (AddResponse)connection.SendRequest(request);
+                return (AddResponse) connection.SendRequest(request);
             }
         }
 
@@ -49,7 +50,7 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             {
                 var request = new ModifyRequest(id, operation, attributeName, attributeValues);
 
-                return (ModifyResponse)connection.SendRequest(request);
+                return (ModifyResponse) connection.SendRequest(request);
             }
         }
 
@@ -59,17 +60,18 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             {
                 var request = new ModifyRequest(id, modifications.ToArray());
 
-                return (ModifyResponse)connection.SendRequest(request);
+                return (ModifyResponse) connection.SendRequest(request);
             }
         }
 
-        public ModifyDNResponse MakeModifyDistinguishedName(string currentDistinguishedName, string parentDistinguishedName, string newName)
+        public ModifyDNResponse MakeModifyDistinguishedName(string currentDistinguishedName,
+            string parentDistinguishedName, string newName)
         {
             using (var connection = _connectionService.OpenConnection())
             {
                 var request = new ModifyDNRequest(currentDistinguishedName, parentDistinguishedName, newName);
 
-                return (ModifyDNResponse)connection.SendRequest(request);
+                return (ModifyDNResponse) connection.SendRequest(request);
             }
         }
 
@@ -79,7 +81,7 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             {
                 var request = new DeleteRequest(distinguishedName);
 
-                return (DeleteResponse)connection.SendRequest(request);
+                return (DeleteResponse) connection.SendRequest(request);
             }
         }
     }

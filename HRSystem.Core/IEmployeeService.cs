@@ -11,6 +11,8 @@ namespace HRSystem.Core
     {
         Task<IEnumerable<Employee>> GetAll();
 
+        Task<IEnumerable<Employee>> Search(string searchFilter);
+        
         Task Add(Employee employee);
 
         Task Update(

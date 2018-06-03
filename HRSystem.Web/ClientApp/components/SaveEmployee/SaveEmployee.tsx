@@ -1,14 +1,14 @@
-import { ISaveEmployeeProps } from "./ISaveEmployeeProps";
-import { ISaveEmployeeState } from "./ISaveEmployeeState";
+import {ISaveEmployeeProps} from "./ISaveEmployeeProps";
+import {ISaveEmployeeState} from "./ISaveEmployeeState";
 import * as React from "react";
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
-import { AttributeType } from "../../models/AttributeType";
-import { AttributeInfo } from "../../models/AttributeInfo";
-import { StringHelper } from "../../helpers/StringHelper";
-import { EventHelper } from "../../helpers/EventHelper";
-import Select, { Option } from "react-select";
-import { ValidationErrors } from "../../models/ValidationErrors";
-import { AttributeControl } from "../AttributeControl/AttributeControl";
+import {Alert, Button, ControlLabel, FormControl, FormGroup, Modal} from "react-bootstrap";
+import {AttributeType} from "../../models/AttributeType";
+import {AttributeInfo} from "../../models/AttributeInfo";
+import {StringHelper} from "../../helpers/StringHelper";
+import {EventHelper} from "../../helpers/EventHelper";
+import Select, {Option} from "react-select";
+import {ValidationErrors} from "../../models/ValidationErrors";
+import {AttributeControl} from "../AttributeControl/AttributeControl";
 
 export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmployeeState> {
 
@@ -32,7 +32,10 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
                    onEscapeKeyUp={() => this.hide()}>
                 <Modal.Header>Create new employee</Modal.Header>
                 <Modal.Body>
-                    <form>
+                    <div hidden={!this.state.isLoading}>
+                        Loading...
+                    </div>
+                    <form hidden={this.state.isLoading}>
                         <Alert hidden={this.state.validationErrors.length == 0}>
                             <ul>
                                 {
@@ -115,7 +118,9 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
                                     info={a}
                                     placeholder={`Enter ${a.name} (custom)`}
                                     value={this.getAttribute(a)}
-                                    onChange={(a: AttributeInfo, value: string) => this.changeAttribute(a, value)} />
+                                    onChange={(a: AttributeInfo, value: string) => this.changeAttribute(a, value)}
+                                    onDeleteFile={(a: AttributeInfo) => this.deleteDocument(a)}
+                                onDownloadFile={(a: AttributeInfo) => this.downloadDocument(a)}/>
                             </FormGroup>)
                         }
                     </form>
@@ -232,5 +237,21 @@ export class SaveEmployee extends React.Component<ISaveEmployeeProps, ISaveEmplo
             office: StringHelper.EMPTY,
             validationErrors: []
         };
+    }
+
+    private deleteDocument(attributeInfo: AttributeInfo) {
+        this.setState({isLoading: true});
+        this.props.employeeService.deleteDocument(this.state.login, attributeInfo.id).then(() => {
+            this.setState(prevState => {
+                return {
+                    attributes: prevState.attributes.filter(a => a.attributeInfoId != attributeInfo.id),
+                    isLoading: false
+                };
+            });
+        });
+    }
+
+    private downloadDocument(a: AttributeInfo) {
+        window.open(`api/document/download/${this.state.login}/${a.id}`, "_blank    ");
     }
 }

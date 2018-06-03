@@ -17,5 +17,10 @@ namespace HRSystem.Data
         {
             return queryable.AnyAsync(e => e.Login == login);
         }
+
+        public static IQueryable<Employee> IncludeAll(this IQueryable<Employee> queryable)
+        {
+            return queryable.Include(e => e.Manager).Include(e => e.Attributes);
+        }
     }
 }

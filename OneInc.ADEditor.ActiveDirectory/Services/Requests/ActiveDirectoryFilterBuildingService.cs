@@ -70,9 +70,9 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Requests
             return BuildFilterForFindingEntities(Entities.User, filter);
         }
 
-        public string BuildFilterForGettingUserByPrincipalName(string principalName)
+        public string BuildFilterForGettingUserByLogin(string principalName)
         {
-            var filter = $"({EntityAttributes.UserPrincipalName}={principalName})";
+            var filter = $"({EntityAttributes.AccountName}={principalName})";
 
             return BuildFilterForFindingEntities(Entities.User, filter);
         }

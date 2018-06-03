@@ -33,9 +33,8 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Connection
                 Credential = new NetworkCredential(_settings.Login, _settings.Password),
                 SessionOptions =
                 {
-                    SecureSocketLayer = _settings.SecureSocketLayer,
-                    ProtocolVersion = _settings.ProtocolVersion,
-                    VerifyServerCertificate = (connection, certificate) => true
+                    SaslMethod = "GSSAPI",
+                    ProtocolVersion = _settings.ProtocolVersion
                 }
             };
 

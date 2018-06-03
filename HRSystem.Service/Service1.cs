@@ -5,39 +5,46 @@ using System.Configuration;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
-using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
 using HRSystem.Composition;
 using HRSystem.Core;
 using HRSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using OneInc.ADEditor.ActiveDirectory;
+using OneInc.ADEditor.Dal.Mapping;
 
 namespace HRSystem.Service
 {
     public partial class Service1 : ServiceBase
     {
         private DateTime _lastSyncedTime = new DateTime(2010, 01, 01);
-        private readonly IEmployeeService _employeeService;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private IEmployeeService _employeeService;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public Service1()
         {
             InitializeComponent();
+        }
+
+        private void Initialize()
+        {
             var builder = new ContainerBuilder();
             builder.RegisterModule(new CompositionModule());
-            builder.Register(a => GetActiveDirectorySettings()).AsSelf().SingleInstance();
+            builder.RegisterInstance(GetActiveDirectorySettings()).AsSelf().SingleInstance();
             builder.RegisterType<HrSystemDb>().AsSelf();
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder();
-            var dbContextOptions = dbContextOptionsBuilder.UseSqlServer(
-                "Data Source=WS-NSK-97;Initial Catalog=HRSystem;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
-                .Options;
-            builder.Register(a => dbContextOptions).As<DbContextOptions>();
+            var connectionString =
+                ((NameValueCollection) ConfigurationManager.GetSection("DataBase")).Get("connectionString");
+            var options = new DbContextOptionsBuilder<HrSystemDb>()
+                .UseSqlServer(connectionString).Options;
+            
+            builder.RegisterInstance(options).As<DbContextOptions>();
             Mapper.Initialize(
                 cfg =>
                 {
                     cfg.AddProfile<AutomapperProfile>();
+                    cfg.AddProfile<ActiveDirectoryAutomapperProfile>();
                 });
             Mapper.AssertConfigurationIsValid();
 
@@ -48,11 +55,13 @@ namespace HRSystem.Service
 
         public void TestStart()
         {
-            OnStart(new [] { "test" });
+            OnStart(new[] {"test"});
         }
 
         protected override void OnStart(string[] args)
         {
+            Initialize();
+
             if (args.FirstOrDefault() == "test")
             {
                 while (!_cancellationTokenSource.IsCancellationRequested)
@@ -92,17 +101,22 @@ namespace HRSystem.Service
             {
                 throw new ArgumentNullException(nameof(section));
             }
-            
+
             return new ActiveDirectorySettings
             {
                 Domain = section.Get("domain"),
                 Login = section.Get("login"),
                 Password = section.Get("password"),
-                Paths = new Dictionary<string, string> {["User"] = section.Get("userPath"), ["Office"] = section.Get("officePath")},
+                Paths = new Dictionary<string, string>
+                {
+                    ["User"] = section.Get("userPath"),
+                    ["Office"] = section.Get("officePath")
+                },
                 ProtocolVersion = int.Parse(section.Get("protocolVersion")),
-                SecureSocketLayer = bool.Parse(section.Get("secureSocketLayer")),
+                SaslMethod = section.Get("saslMethod"),
                 Server = section.Get("server"),
-                TechincalUserAuthenticationMode = (TechincalUserAuthenticationMode)Enum.Parse(typeof(TechincalUserAuthenticationMode), section.Get("techincalUserAuthenticationMode")),
+                TechincalUserAuthenticationMode = (TechincalUserAuthenticationMode) Enum.Parse(
+                    typeof(TechincalUserAuthenticationMode), section.Get("techincalUserAuthenticationMode")),
                 Timeout = TimeSpan.Parse(section.Get("timeout")),
                 UserCreationPathPrefix = section.Get("UserCreationPathPrefix")
             };

@@ -4,7 +4,7 @@ import * as React from "react";
 import { SaveEmployee } from "../SaveEmployee/SaveEmployee";
 import { AttributeType } from "../../models/AttributeType";
 import { EventHelper } from "../../helpers/EventHelper";
-import { Checkbox, ControlLabel, FormControl, FormGroup } from "react-bootstrap";
+import {Button, Checkbox, ControlLabel, FormControl, FormGroup} from "react-bootstrap";
 import { StringHelper } from "../../helpers/StringHelper";
 import { FormEventHandler } from "react";
 
@@ -33,9 +33,15 @@ export class AttributeControl extends React.Component<IAttributeControlProps, IA
                     checked={this.props.value == "true"}
                     onChange={(event) => this.change(EventHelper.getBoolValue(event))}/>);
             case AttributeType.Document:
-                return (<input
-                    type="file"
-                    onChange={(a) => this.uploadFile(a)}/>);
+                return (<div>
+                    {
+                        this.props.value == "true" ?
+                            <div>
+                                <Button bsStyle="success" onClick={() => this.downloadFile()}>DOWNLOAD</Button>
+                                <Button bsStyle="danger" onClick={() => this.deleteFile()}>DELETE</Button></div> :
+                            <input type="file" onChange={(a) => this.uploadFile(a)}/>
+                    }
+                </div>);
             default:
                 return (<FormControl
                     key={this.props.info.id}
@@ -60,6 +66,18 @@ export class AttributeControl extends React.Component<IAttributeControlProps, IA
     private uploadFile(event: any) {
         let file = event.target.files[0];
         this.props.onChange(this.props.info, file);
+    }
+
+    private deleteFile() {
+        if (this.props.onDeleteFile != null) {
+            this.props.onDeleteFile(this.props.info);
+        }
+    }
+
+    private downloadFile() {
+        if (this.props.onDownloadFile != null) {
+            this.props.onDownloadFile(this.props.info);
+        }
     }
 }
 

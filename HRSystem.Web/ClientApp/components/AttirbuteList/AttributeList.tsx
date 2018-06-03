@@ -36,6 +36,7 @@ export class AttributeList extends React.Component<IAttributeListProps, IAttribu
                         <th>Name</th>
                         <th>Type</th>
                         <th/>
+                        <th/>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,7 +44,8 @@ export class AttributeList extends React.Component<IAttributeListProps, IAttribu
                         this.state.attributes.map(a => <tr key={a.id}>
                             <td>{a.name}</td>
                             <td>{AttributeType[a.type]}</td>
-                            <td><Button bsStyle="primary" onClick={() => this.update(a)}>Update</Button></td>
+                            <td><Button bsStyle="primary" onClick={() => this.update(a)}>UPDATE</Button></td>
+                            <td><Button bsStyle="danger" onClick={() => this.delete(a)}>DELETE</Button></td>
                         </tr>)
                     }
                     </tbody>
@@ -68,5 +70,12 @@ export class AttributeList extends React.Component<IAttributeListProps, IAttribu
     private hideModal(): void {
         this.setState({showModal: false, isLoading: true, idUpdate: null});
         this.componentDidMountAsync().then();
+    }
+
+    private delete(a: AttributeInfo) {
+        this.setState({showModal: false, isLoading: true, idUpdate: null});
+        this.props.service.deleteAttribute(a.id).then(() => {
+            this.componentDidMountAsync().then();
+        });
     }
 }

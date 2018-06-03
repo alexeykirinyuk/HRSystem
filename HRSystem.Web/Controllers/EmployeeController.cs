@@ -2,8 +2,8 @@
 using HRSystem.Commands.SaveEmployee;
 using HRSystem.Common.Errors;
 using HRSystem.Common.Validation;
-using HRSystem.Queries.EmployeeQuery;
 using HRSystem.Queries.EmployeeSavingInfo;
+using HRSystem.Queries.GetEmployees;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,9 +22,12 @@ namespace HRSystem.Web.Controllers
         }
 
         [HttpGet("all")]
-        public Task<EmployeeQueryResponse> GetEmployees()
+        public Task<GetEmployeesQueryResponse> GetEmployees(string search = null)
         {
-            return _mediator.Send(new EmployeeQuery());
+            return _mediator.Send(new GetEmployeesQuery
+            {
+                SearchFilter = search
+            });
         }
 
         [HttpGet("creationInfo")]

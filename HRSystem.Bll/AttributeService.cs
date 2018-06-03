@@ -55,5 +55,14 @@ namespace HRSystem.Bll
         {
             return await _db.AttributeInfos.SingleAsync(a => a.Id == id).ConfigureAwait(false);
         }
+
+        public Task Delete(AttributeInfo attributeInfo)
+        {
+            var attributeBases = _db.AttributeBases.Where(a => a.AttributeInfoId == attributeInfo.Id);
+            _db.AttributeBases.RemoveRange(attributeBases);
+            _db.AttributeInfos.Remove(attributeInfo);
+            
+            return _db.SaveChangesAsync();
+        }
     }
 }

@@ -15,7 +15,8 @@ namespace OneInc.ADEditor.Dal.Mapping.ActiveDirectory
                 destination = new User();
             }
 
-            destination.Login = source.GetPropertyValue(EntityAttributes.UserPrincipalName);
+            destination.DistinguishedName = source.GetPropertyValue(EntityAttributes.DistinguishedName);
+            destination.Login = source.GetPropertyValue(EntityAttributes.AccountName);
             destination.FirstName = source.GetPropertyValue(EntityAttributes.FirstName);
             destination.LastName = source.GetPropertyValue(EntityAttributes.LastName);
             destination.Email = source.GetPropertyValue(EntityAttributes.Email);

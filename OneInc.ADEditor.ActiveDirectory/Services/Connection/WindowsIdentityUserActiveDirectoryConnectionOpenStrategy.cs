@@ -36,7 +36,7 @@ namespace OneInc.ADEditor.ActiveDirectory.Services.Connection
                 Timeout = _settings.Timeout,
                 SessionOptions =
                 {
-                    SecureSocketLayer = _settings.SecureSocketLayer,
+                    SaslMethod = _settings.SaslMethod,
                     ProtocolVersion = _settings.ProtocolVersion,
                     VerifyServerCertificate = (connection, certificate) => true
                 }
