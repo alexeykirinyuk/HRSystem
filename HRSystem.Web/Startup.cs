@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using Autofac;
 using AutoMapper;
+using HRSystem.ActiveDirectory;
 using HRSystem.Bll;
 using HRSystem.Commands.SaveAttribute;
 using HRSystem.Commands.SaveEmployee;
@@ -22,7 +23,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using OneInc.ADEditor.ActiveDirectory;
 
 namespace HRSystem.Web
 {

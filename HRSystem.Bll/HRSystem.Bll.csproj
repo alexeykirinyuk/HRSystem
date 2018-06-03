@@ -3,8 +3,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRSystem.ActiveDirectory.Dal\HRSystem.ActiveDirectory.Dal.csproj" />
     <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
     <ProjectReference Include="..\HRSystem.Data\HRSystem.Data.csproj" />
-    <ProjectReference Include="..\OneInc.ADEditor.Dal\OneInc.ADEditor.Dal.csproj" />
   </ItemGroup>
 </Project>

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using HRSystem.ActiveDirectory;
+using HRSystem.ActiveDirectory.Services.Connection;
+using HRSystem.ActiveDirectory.Services.Connection.Interfaces;
 using HRSystem.Common.Extensions;
-using OneInc.ADEditor.ActiveDirectory;
-using OneInc.ADEditor.ActiveDirectory.Services.Connection;
-using OneInc.ADEditor.ActiveDirectory.Services.Connection.Interfaces;
 using Module = Autofac.Module;
 
 namespace HRSystem.Composition

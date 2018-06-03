@@ -7,12 +7,12 @@ using System.ServiceProcess;
 using System.Threading;
 using Autofac;
 using AutoMapper;
+using HRSystem.ActiveDirectory;
+using HRSystem.ActiveDirectory.Dal.Mapping;
 using HRSystem.Composition;
 using HRSystem.Core;
 using HRSystem.Data;
 using Microsoft.EntityFrameworkCore;
-using OneInc.ADEditor.ActiveDirectory;
-using OneInc.ADEditor.Dal.Mapping;
 
 namespace HRSystem.Service
 {

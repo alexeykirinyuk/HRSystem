@@ -1,16 +1,77 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{79F4453B-8E7E-46C1-A2EA-358029A760BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HRSystem.ActiveDirectory</RootNamespace>
+    <AssemblyName>HRSystem.ActiveDirectory</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.DirectoryServices" />
+    <Reference Include="LiteGuard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteGuard.1.1.0\lib\net35\LiteGuard.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LinqToLdap" Version="4.0.0" />
-    <PackageReference Include="LinqToLdapExtensions" Version="1.0.5" />
+    <Compile Include="ActiveDirectorySettings.cs" />
+    <Compile Include="ActiveDirectoryConstants.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Services\Connection\ActiveDirectoryConnectionService.cs" />
+    <Compile Include="Services\Connection\Interfaces\IActiveDirectoryConnectionOpenStrategy.cs" />
+    <Compile Include="Services\Requests\ActiveDirectoryFilterBuildingService.cs" />
+    <Compile Include="Services\Requests\ActiveDirectoryDistinguishedNameBuilderService.cs" />
+    <Compile Include="Services\Requests\Interfaces\IActiveDirectoryDistinguishedNameBuilderService.cs" />
+    <Compile Include="Services\Requests\Interfaces\IActiveDirectoryFilterBuildingService.cs" />
+    <Compile Include="TechincalUserAuthenticationMode.cs" />
+    <Compile Include="Services\Connection\WindowsIdentityUserActiveDirectoryConnectionOpenStrategy.cs" />
+    <Compile Include="Services\Connection\ActiveDirectoryConnectionAdapter.cs" />
+    <Compile Include="Services\Connection\Interfaces\IActiveDirectoryConnection.cs" />
+    <Compile Include="Extensions\SearchResultEntryExtensions.cs" />
+    <Compile Include="Services\Connection\SettingsUserActiveDirectoryConnectionOpenStrategy.cs" />
+    <Compile Include="Services\Requests\ActiveDirectoryRequestService.cs" />
+    <Compile Include="Services\Requests\ActiveDirectoryService.cs" />
+    <Compile Include="Services\Requests\Interfaces\IActiveDirectoryService.cs" />
+    <Compile Include="Services\Requests\Interfaces\IActiveDirectoryRequestService.cs" />
+    <Compile Include="Services\Connection\Interfaces\IActiveDirectoryConnectionService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
-    <ProjectReference Include="..\OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

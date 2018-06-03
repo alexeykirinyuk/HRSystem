@@ -151,6 +151,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HRSystem.ActiveDirectory.Dal\HRSystem.ActiveDirectory.Dal.csproj">
+      <Project>{07bfa90d-a098-48b0-ae5f-1bbf0699793d}</Project>
+      <Name>HRSystem.ActiveDirectory.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRSystem.ActiveDirectory\HRSystem.ActiveDirectory.csproj">
+      <Project>{79f4453b-8e7e-46c1-a2ea-358029a760be}</Project>
+      <Name>HRSystem.ActiveDirectory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRSystem.Bll\HRSystem.Bll.csproj">
       <Project>{b858f0ca-51c8-4cec-b19d-890338238677}</Project>
       <Name>HRSystem.Bll</Name>
@@ -186,14 +194,6 @@
     <ProjectReference Include="..\HRSystem.Queries\HRSystem.Queries.csproj">
       <Project>{32663c8c-2f06-4c7b-9919-6a168ee91c9d}</Project>
       <Name>HRSystem.Queries</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OneInc.ADEditor.ActiveDirectory\OneInc.ADEditor.ActiveDirectory.csproj">
-      <Project>{79f4453b-8e7e-46c1-a2ea-358029a760be}</Project>
-      <Name>OneInc.ADEditor.ActiveDirectory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OneInc.ADEditor.Dal\OneInc.ADEditor.Dal.csproj">
-      <Project>{07bfa90d-a098-48b0-ae5f-1bbf0699793d}</Project>
-      <Name>OneInc.ADEditor.Dal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
