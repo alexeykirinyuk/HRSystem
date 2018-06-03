@@ -70,12 +70,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OneInc.ADEditor.Common\OneInc.ADEditor.Common.csproj">
-      <Project>{465E2110-E2C9-4257-B8EB-DEA73BC02C01}</Project>
-      <Name>OneInc.ADEditor.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -11,7 +11,6 @@ using HRSystem.Composition;
 using HRSystem.Core;
 using HRSystem.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using OneInc.ADEditor.ActiveDirectory;
 using OneInc.ADEditor.Dal.Mapping;
 

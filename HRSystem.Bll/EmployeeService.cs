@@ -16,35 +16,51 @@ namespace HRSystem.Bll
     public class EmployeeService : IEmployeeService
     {
         private readonly HrSystemDb _db;
-        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
         private readonly IDocumentService _documentService;
 
-        public EmployeeService(HrSystemDb hrSystemDb, IUserService userService, IDocumentService documentService)
+        public EmployeeService(HrSystemDb hrSystemDb, IUserRepository userRepository, IDocumentService documentService)
         {
             ArgumentHelper.EnsureNotNull(nameof(hrSystemDb), hrSystemDb);
-            ArgumentHelper.EnsureNotNull(nameof(userService), userService);
+            ArgumentHelper.EnsureNotNull(nameof(userRepository), userRepository);
             ArgumentHelper.EnsureNotNull(nameof(documentService), documentService);
 
             _db = hrSystemDb;
-            _userService = userService;
+            _userRepository = userRepository;
             _documentService = documentService;
         }
 
         public async Task<IEnumerable<Employee>> GetAll()
         {
-            return await WithDocuments(_db.Employees.IncludeAll()).ToArrayAsync().ConfigureAwait(false);
+            var employeeArray = await _db.Employees
+                .Include(e => e.Attributes)
+                .Include(e => e.Manager)
+                .ToArrayAsync()
+                .ConfigureAwait(false);
+
+            return WithDocuments(employeeArray);
         }
 
         public async Task<IEnumerable<Employee>> Search(string searchFilter)
         {
-            var employeeQueryable = _db.Employees
-                .IncludeAll()
-                .Where(e => e.ContainsText(searchFilter));
+            var employeeQueryable = await _db.Employees
+                .Where(e => e.Login.Contains(searchFilter) ||
+                            e.FullName.Contains(searchFilter) ||
+                            e.Email != null && e.Email.Contains(searchFilter) ||
+                            e.JobTitle != null && e.JobTitle.Contains(searchFilter) ||
+                            e.Phone != null && e.Phone.Contains(searchFilter) ||
+                            e.Office != null && e.Office.Contains(searchFilter) ||
+                            e.Manager != null && e.Manager.FullName.Contains(searchFilter) ||
+                            e.Attributes.Any(a => a.GetValueAsString().Contains(searchFilter)))
+                .Include(e => e.Manager)
+                .Include(e => e.Attributes)
+                .ToArrayAsync()
+                .ConfigureAwait(false);
 
-            return await WithDocuments(employeeQueryable).ToArrayAsync().ConfigureAwait(false);
+            return WithDocuments(employeeQueryable);
         }
 
-        private IQueryable<Employee> WithDocuments(IQueryable<Employee> employeeArray)
+        private Employee[] WithDocuments(Employee[] employeeArray)
         {
             var documentAttributeInfos = _db.AttributeInfos
                 .Where(a => a.Type == AttributeType.Document);
@@ -85,7 +101,7 @@ namespace HRSystem.Bll
             ArgumentHelper.EnsureNotNullOrEmpty(nameof(firstName), firstName);
             ArgumentHelper.EnsureNotNullOrEmpty(nameof(lastName), lastName);
 
-            var employee = await _db.Employees.IncludeAll().GetByLogin(login);
+            var employee = await _db.Employees.Include(e => e.Manager).Include(e => e.Attributes).GetByLogin(login);
             employee.Update(
                 firstName: firstName,
                 lastName: lastName,
@@ -110,7 +126,10 @@ namespace HRSystem.Bll
 
         public async Task<Employee> GetByLogin(string login)
         {
-            var employee = await _db.Employees.IncludeAll().SingleOrDefaultAsync(e => e.Login == login);
+            var employee = await _db.Employees
+                .Include(e => e.Manager)
+                .Include(e => e.Attributes)
+                .SingleOrDefaultAsync(e => e.Login == login);
             var docAttrs = _db.AttributeInfos.Where(a => a.Type == AttributeType.Document);
             foreach (var attributeInfo in docAttrs)
             {
@@ -124,7 +143,7 @@ namespace HRSystem.Bll
         public async Task SyncWithActiveDirectory(DateTime fromDate)
         {
             var employeesLastUpdated = GetEmployeesUpdatedBetweenDates(fromDate).ToArray();
-            var usersLastUpdated = _userService.GetUsersUpdatedFrom(fromDate).ToArray();
+            var usersLastUpdated = _userRepository.GetUsersUpdatedFrom(fromDate).ToArray();
 
             SyncEmployeesToUsers(employeesLastUpdated);
             await SyncUsersToEmployees(usersLastUpdated, employeesLastUpdated);
@@ -141,7 +160,7 @@ namespace HRSystem.Bll
         {
             foreach (var lastUpdatedEmployee in employeesLastUpdated)
             {
-                var user = _userService.GetByLogin(lastUpdatedEmployee.Login);
+                var user = _userRepository.GetByLogin(lastUpdatedEmployee.Login);
                 if (user == null)
                 {
                     CreateUser(lastUpdatedEmployee, employeesLastUpdated);
@@ -151,10 +170,10 @@ namespace HRSystem.Bll
                     User manager = null;
                     if (lastUpdatedEmployee.Manager != null)
                     {
-                        manager = _userService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                        manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
                     }
 
-                    _userService.Update(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+                    _userRepository.Update(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
                 }
             }
         }
@@ -165,7 +184,7 @@ namespace HRSystem.Bll
             User manager = null;
             if (lastUpdatedEmployee.Manager != null)
             {
-                manager = _userService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
             }
 
             if (lastUpdatedEmployee.Manager != null &&
@@ -173,10 +192,10 @@ namespace HRSystem.Bll
                 lastUpdatedEmployeeArray.ContainsByLogin(lastUpdatedEmployee.ManagerLogin))
             {
                 CreateUser(lastUpdatedEmployee.Manager, lastUpdatedEmployeeArray);
-                manager = _userService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
+                manager = _userRepository.GetByLogin(lastUpdatedEmployee.ManagerLogin);
             }
 
-            _userService.Create(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+            _userRepository.Create(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
         }
 
         private async Task SyncUsersToEmployees(IEnumerable<User> usersLastUpdated,

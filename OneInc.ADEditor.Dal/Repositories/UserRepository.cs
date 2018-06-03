@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using AutoMapper;
-using HRSystem.Core;
 using HRSystem.Domain;
+using HRSystem.Core;
 using LiteGuard;
 using OneInc.ADEditor.ActiveDirectory;
 using OneInc.ADEditor.ActiveDirectory.Extensions;
@@ -16,7 +13,7 @@ using static OneInc.ADEditor.ActiveDirectory.ActiveDirectoryConstants;
 
 namespace OneInc.ADEditor.Dal.Repositories
 {
-    public class UserService : IUserService
+    public class UserRepository : IUserRepository
     {
         private readonly IActiveDirectoryFilterBuildingService _filterBuildingService;
         private readonly IActiveDirectoryDistinguishedNameBuilderService _distinguishedNameBuilderService;
@@ -25,7 +22,7 @@ namespace OneInc.ADEditor.Dal.Repositories
         private readonly IActiveDirectoryUserUpdatingInfoBuilderService _updatingInfoBuilderService;
         private readonly string _parentDistinguishedName;
 
-        public UserService(
+        public UserRepository(
             IActiveDirectoryFilterBuildingService filterBuildingService,
             IActiveDirectoryDistinguishedNameBuilderService distinguishedNameBuilderService,
             IActiveDirectoryService activeDirectoryService,
