@@ -8,33 +8,25 @@ namespace HRSystem.Domain.Attributes.Base
     public class AttributeInfo
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public AttributeType Type { get; set; }
 
         public bool IsActiveDirectoryAttribute => ActiveDirectoryAttributeInfoId.HasValue;
-        
+
         public int? ActiveDirectoryAttributeInfoId { get; set; }
-        
+
         public ActiveDirectoryAttributeInfo ActiveDirectoryAttributeInfo { get; set; }
 
         public AttributeInfo()
         {
         }
 
-        public AttributeInfo(
-            string name,
-            AttributeType type,
-            ActiveDirectoryAttributeInfo activeDirectoryAttributeInfo = default)
+        public void Update(AttributeInfo attributeInfo)
         {
-            ArgumentHelper.EnsureNotNullOrEmpty("name", name);
-            
-            Name = name;
-            Type = type;
-
-            ActiveDirectoryAttributeInfoId = activeDirectoryAttributeInfo?.Id;
-            ActiveDirectoryAttributeInfo = activeDirectoryAttributeInfo;
+            Name = attributeInfo.Name;
+            Type = attributeInfo.Type;
         }
     }
 }

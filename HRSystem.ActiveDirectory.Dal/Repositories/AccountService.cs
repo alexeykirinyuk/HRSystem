@@ -67,8 +67,14 @@ namespace HRSystem.ActiveDirectory.Dal.Repositories
         {
             var password = _creationInfoBuilderService.GeneratePassword();
             var attributes = _creationInfoBuilderService.BuildUserCreationInfo(account, password);
+            var officeDistinguishedName = GetOfficeDistinguishedNameByLocation(account.Office);
+            if (string.IsNullOrEmpty(officeDistinguishedName))
+            {
+                throw new InvalidOperationException("Office with same location not found.");
+            }
+            
             _activeDirectoryService.Create(
-                GetOfficeDistinguishedNameByLocation(account.Office),
+                officeDistinguishedName,
                 account.FullName,
                 attributes.ToArray());
         }

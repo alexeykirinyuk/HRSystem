@@ -15,16 +15,16 @@ namespace HRSystem.Composition
     {
         private static readonly IEnumerable<string> AssemblyNames = new[]
         {
-            "OneInc.ADEditor.ActiveDirectory",
-            "OneInc.ADEditor.Dal",
-            $"{nameof(HRSystem)}.Bll",
-            $"{nameof(HRSystem)}.Commands",
-            $"{nameof(HRSystem)}.Queries",
-            $"{nameof(HRSystem)}.Common",
-            $"{nameof(HRSystem)}.Core",
-            $"{nameof(HRSystem)}.Data",
-            $"{nameof(HRSystem)}.Domain",
-            $"{nameof(HRSystem)}.Infrastructure"
+            $"{nameof(HRSystem)}.{nameof(ActiveDirectory)}",
+            $"{nameof(HRSystem)}.{nameof(ActiveDirectory)}.{nameof(ActiveDirectory.Dal)}",
+            $"{nameof(HRSystem)}.{nameof(Bll)}",
+            $"{nameof(HRSystem)}.{nameof(Commands)}",
+            $"{nameof(HRSystem)}.{nameof(Queries)}",
+            $"{nameof(HRSystem)}.{nameof(Common)}",
+            $"{nameof(HRSystem)}.{nameof(Core)}",
+            $"{nameof(HRSystem)}.{nameof(Data)}",
+            $"{nameof(HRSystem)}.{nameof(Domain)}",
+            $"{nameof(HRSystem)}.{nameof(Infrastructure)}"
         };
 
         protected override void Load(ContainerBuilder builder)
@@ -34,7 +34,7 @@ namespace HRSystem.Composition
             RegisterActiveDirectoryConnectionOpenStrategies(builder);
         }
 
-        public static void RegisterServices(ContainerBuilder builder, Assembly[] assemblies)
+        private static void RegisterServices(ContainerBuilder builder, Assembly[] assemblies)
         {
             var servicesPostfixes = new[] {"Service", "Provider", "Repository", "Job", "Command", "Query", "Handler", "Response", "Validator"};
             builder.RegisterAssemblyTypes(assemblies)
@@ -44,7 +44,7 @@ namespace HRSystem.Composition
                 .InstancePerLifetimeScope();
         }
 
-        public static void RegisterActiveDirectoryConnectionOpenStrategies(ContainerBuilder builder)
+        private static void RegisterActiveDirectoryConnectionOpenStrategies(ContainerBuilder builder)
         {
             builder.RegisterType<WindowsIdentityUserActiveDirectoryConnectionOpenStrategy>()
                 .Keyed<IActiveDirectoryConnectionOpenStrategy>(TechincalUserAuthenticationMode.WindowsIdentity);

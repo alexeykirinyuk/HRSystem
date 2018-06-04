@@ -1,5 +1,4 @@
-﻿using System;
-using HRSystem.Domain.Attributes.Base;
+﻿using HRSystem.Domain.Attributes.Base;
 
 namespace HRSystem.Domain.Attributes
 {

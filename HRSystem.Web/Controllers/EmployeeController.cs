@@ -2,8 +2,8 @@
 using HRSystem.Commands.SaveEmployee;
 using HRSystem.Common.Errors;
 using HRSystem.Common.Validation;
-using HRSystem.Queries.EmployeeSavingInfo;
 using HRSystem.Queries.GetEmployees;
+using HRSystem.Queries.GetEmployeeSavingInfo;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,9 +31,9 @@ namespace HRSystem.Web.Controllers
         }
 
         [HttpGet("creationInfo")]
-        public Task<EmployeeSavingInfoQueryResponse> GetCreateEmploeeInfo(string login, bool isCreate)
+        public Task<GetEmployeeSavingInfoQueryResponse> GetCreateEmploeeInfo(string login, bool isCreate)
         {
-            return _mediator.Send(new EmployeeSavingInfoQuery
+            return _mediator.Send(new GetEmployeeSavingInfoQuery
             {
                 Login = login,
                 IsCreate = isCreate

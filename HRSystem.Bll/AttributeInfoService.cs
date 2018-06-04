@@ -28,12 +28,16 @@ namespace HRSystem.Bll
 
         public async Task<bool> IsExists(int attributeInfoId)
         {
-            return await _db.AttributeInfos.AnyAsync(a => a.Id == attributeInfoId).ConfigureAwait(false);
+            return await _db.AttributeInfos
+                .AnyAsync(a => a.Id == attributeInfoId)
+                .ConfigureAwait(false);
         }
 
         public async Task<bool> IsExists(string name)
         {
-            return await _db.AttributeInfos.AnyAsync(a => a.Name == name).ConfigureAwait(false);
+            return await _db.AttributeInfos
+                .AnyAsync(a => a.Name == name)
+                .ConfigureAwait(false);
         }
 
         public async Task Create(AttributeInfo attribute)
@@ -45,15 +49,15 @@ namespace HRSystem.Bll
         public async Task Update(AttributeInfo attribute)
         {
             var item = await _db.AttributeInfos.SingleAsync(a => a.Id == attribute.Id).ConfigureAwait(false);
-            item.Name = attribute.Name;
-            item.Type = attribute.Type;
-            
+            item.Update(attribute);
             await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task<AttributeInfo> GetById(int id)
         {
-            return await _db.AttributeInfos.SingleAsync(a => a.Id == id).ConfigureAwait(false);
+            return await _db.AttributeInfos
+                .SingleAsync(a => a.Id == id)
+                .ConfigureAwait(false);
         }
 
         public Task Delete(AttributeInfo attributeInfo)

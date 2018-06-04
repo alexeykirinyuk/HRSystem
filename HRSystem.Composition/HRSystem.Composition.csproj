@@ -8,6 +8,12 @@
   <ItemGroup>
     <ProjectReference Include="..\HRSystem.ActiveDirectory.Dal\HRSystem.ActiveDirectory.Dal.csproj" />
     <ProjectReference Include="..\HRSystem.ActiveDirectory\HRSystem.ActiveDirectory.csproj" />
+    <ProjectReference Include="..\HRSystem.Bll\HRSystem.Bll.csproj" />
+    <ProjectReference Include="..\HRSystem.Commands\HRSystem.Commands.csproj" />
     <ProjectReference Include="..\HRSystem.Common\HRSystem.Common.csproj" />
+    <ProjectReference Include="..\HRSystem.Core\HRSystem.Core.csproj" />
+    <ProjectReference Include="..\HRSystem.Data\HRSystem.Data.csproj" />
+    <ProjectReference Include="..\HRSystem.Infrastructure\HRSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\HRSystem.Queries\HRSystem.Queries.csproj" />
   </ItemGroup>
 </Project>

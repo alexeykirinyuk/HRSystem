@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRSystem.Commands.DeleteAttribute;
 using HRSystem.Commands.SaveAttribute;
 using HRSystem.Common.Errors;
 using HRSystem.Common.Validation;
-using HRSystem.Queries.AttributeQuery;
-using HRSystem.Queries.AttributeSavingInfo;
+using HRSystem.Queries.GetAttributesQuery;
+using HRSystem.Queries.GetAttributeSavingInfo;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,15 +23,15 @@ namespace HRSystem.Web.Controllers
         }
 
         [HttpGet("all")]
-        public Task<AttributeQueryResponse> GetAll()
+        public Task<GetAttributesQueryResponse> GetAll()
         {
-            return _mediator.Send(new AttributeQuery());
+            return _mediator.Send(new GetAttributesQuery());
         }
 
         [HttpGet("savingInfo/{id?}")]
-        public Task<AttributeSavingInfoQueryResponse> GetSavingInfo(int? id)
+        public Task<GetAttributeSavingInfoQueryResponse> GetSavingInfo(int? id)
         {
-            return _mediator.Send(new AttributeSavingInfoQuery {Id = id});
+            return _mediator.Send(new GetAttributeSavingInfoQuery {Id = id});
         }
 
         [HttpPost("save")]

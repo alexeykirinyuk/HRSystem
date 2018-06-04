@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using HRSystem.Web.Dtos;
 
-namespace HRSystem.Queries.EmployeeSavingInfo
+namespace HRSystem.Queries.GetEmployeeSavingInfo
 {
-    public class EmployeeSavingInfoQueryResponse
+    public class GetEmployeeSavingInfoQueryResponse
     {
         public EmployeeDto Employee { get; set; }
         public ICollection<AttributeInfoDto> Attributes { get; set; }

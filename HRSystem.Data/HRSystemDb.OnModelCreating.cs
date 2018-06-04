@@ -10,6 +10,15 @@ namespace HRSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
+                .Property(e => e.FirstName)
+                .IsRequired();
+            modelBuilder.Entity<Employee>()
+                .Property(e => e.LastName)
+                .IsRequired();
+            modelBuilder.Entity<Employee>()
+                .Property(e => e.Login)
+                .IsRequired();
+            modelBuilder.Entity<Employee>()
                 .HasKey(employee => employee.Login);
 
             modelBuilder.Entity<AttributeInfo>()
@@ -29,19 +38,15 @@ namespace HRSystem.Data
                 .HasValue<BoolAttribute>(AttributeType.Bool);
 
             modelBuilder.Entity<DateTimeAttribute>()
-                .ToTable("DateTimeAttribute")
                 .Property(d => d.Value)
                 .HasColumnName("DateTimeAttributeValue");
             modelBuilder.Entity<IntAttribute>()
-                .ToTable("IntAttribute")
                 .Property(d => d.Value)
                 .HasColumnName("IntAttributeValue");
             modelBuilder.Entity<StringAttribute>()
-                .ToTable("StringAttribute")
                 .Property(d => d.Value)
                 .HasColumnName("StringAttributeValue");
             modelBuilder.Entity<BoolAttribute>()
-                .ToTable("BoolAttribute")
                 .Property(d => d.Value)
                 .HasColumnName("BoolAttributeValue");
         }

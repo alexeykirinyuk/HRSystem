@@ -5,20 +5,20 @@ using HRSystem.Common.Validation;
 using HRSystem.Core;
 using HRSystem.Global.Validation;
 
-namespace HRSystem.Queries.AttributeSavingInfo
+namespace HRSystem.Queries.GetAttributeSavingInfo
 {
-    public class AttributeSavingInfoQueryValidator : IValidator<AttributeSavingInfoQuery>
+    public class GetAttributeSavingInfoQueryValidator : IValidator<GetAttributeSavingInfoQuery>
     {
         private readonly IAttributeInfoService _attributeInfoService;
 
-        public AttributeSavingInfoQueryValidator(IAttributeInfoService attributeInfoService)
+        public GetAttributeSavingInfoQueryValidator(IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
             _attributeInfoService = attributeInfoService;
         }
 
-        public async Task Validate(List<ValidationFailure> list, AttributeSavingInfoQuery request)
+        public async Task Validate(List<ValidationFailure> list, GetAttributeSavingInfoQuery request)
         {
             if (!request.Id.HasValue)
             {

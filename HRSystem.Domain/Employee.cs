@@ -64,7 +64,7 @@ namespace HRSystem.Domain
                 employee.Attributes.All(a => a.AttributeInfoId != currentAttribute.AttributeInfoId));
         }
 
-        public Account ToUser(string managerDistinguishedName)
+        public Account ToAccount(string managerDistinguishedName)
         {
             return new Account
             {

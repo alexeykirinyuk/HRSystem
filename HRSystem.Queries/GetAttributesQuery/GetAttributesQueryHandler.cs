@@ -5,24 +5,24 @@ using HRSystem.Common.Errors;
 using HRSystem.Core;
 using MediatR;
 
-namespace HRSystem.Queries.AttributeQuery
+namespace HRSystem.Queries.GetAttributesQuery
 {
-    public class AttributeQueryHandler : IRequestHandler<AttributeQuery, AttributeQueryResponse>
+    public class GetAttributesQueryHandler : IRequestHandler<GetAttributesQuery, GetAttributesQueryResponse>
     {
         private readonly IAttributeInfoService _attributeInfoService;
 
-        public AttributeQueryHandler(IAttributeInfoService attributeInfoService)
+        public GetAttributesQueryHandler(IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
 
             _attributeInfoService = attributeInfoService;
         }
 
-        public async Task<AttributeQueryResponse> Handle(AttributeQuery request, CancellationToken cancellationToken)
+        public async Task<GetAttributesQueryResponse> Handle(GetAttributesQuery request, CancellationToken cancellationToken)
         {
             var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
             
-            return new AttributeQueryResponse
+            return new GetAttributesQueryResponse
             {
                 Attributes = attributes.ToArray()
             };

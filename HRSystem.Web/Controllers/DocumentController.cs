@@ -55,7 +55,11 @@ namespace HRSystem.Web.Controllers
             try
             {
                 var response =
-                    await _mediator.Send(new GetDocumentQuery {EmployeeLogin = employeeLogin, AttributeInfoId = attributeInfoId})
+                    await _mediator.Send(new GetDocumentQuery
+                        {
+                            EmployeeLogin = employeeLogin,
+                            AttributeInfoId = attributeInfoId
+                        })
                         .ConfigureAwait(false);
                 var memory = new MemoryStream(response.Document.Content) {Position = 0};
 
@@ -72,7 +76,8 @@ namespace HRSystem.Web.Controllers
         {
             try
             {
-                await _mediator.Send(new DeleteDocumentCommand {EmployeeLogin = employeeLogin, AttributeInfoId = attributeInfoId})
+                await _mediator
+                    .Send(new DeleteDocumentCommand {EmployeeLogin = employeeLogin, AttributeInfoId = attributeInfoId})
                     .ConfigureAwait(false);
                 return Ok();
             }
@@ -80,7 +85,6 @@ namespace HRSystem.Web.Controllers
             {
                 return BadRequest(e.ToResponse());
             }
-            
         }
 
         private string GetContentType(string path)

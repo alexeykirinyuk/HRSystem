@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using HRSystem.Domain;
@@ -21,6 +22,11 @@ namespace HRSystem.Data
         public static IQueryable<Employee> IncludeAll(this IQueryable<Employee> queryable)
         {
             return queryable.Include(e => e.Manager).Include(e => e.Attributes);
+        }
+
+        public static IQueryable<Employee> GetEmployeesUpdatedFrom(this IQueryable<Employee> queryable, DateTime @from)
+        {
+            return queryable.Where(e => e.LastModified > from);
         }
     }
 }

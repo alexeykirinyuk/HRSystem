@@ -10,15 +10,15 @@ using HRSystem.Domain.Attributes.Base;
 using HRSystem.Web.Dtos;
 using MediatR;
 
-namespace HRSystem.Queries.EmployeeSavingInfo
+namespace HRSystem.Queries.GetEmployeeSavingInfo
 {
     public class
-        EmployeeSavingInfoQueryHandler : IRequestHandler<EmployeeSavingInfoQuery, EmployeeSavingInfoQueryResponse>
+        GetEmployeeSavingInfoQueryHandler : IRequestHandler<GetEmployeeSavingInfoQuery, GetEmployeeSavingInfoQueryResponse>
     {
         private readonly IEmployeeService _employeeService;
         private readonly IAttributeInfoService _attributeInfoService;
 
-        public EmployeeSavingInfoQueryHandler(IEmployeeService employeeService, IAttributeInfoService attributeInfoService)
+        public GetEmployeeSavingInfoQueryHandler(IEmployeeService employeeService, IAttributeInfoService attributeInfoService)
         {
             ArgumentHelper.EnsureNotNull(nameof(employeeService), employeeService);
             ArgumentHelper.EnsureNotNull(nameof(attributeInfoService), attributeInfoService);
@@ -27,14 +27,14 @@ namespace HRSystem.Queries.EmployeeSavingInfo
             _attributeInfoService = attributeInfoService;
         }
 
-        public async Task<EmployeeSavingInfoQueryResponse> Handle(EmployeeSavingInfoQuery request,
+        public async Task<GetEmployeeSavingInfoQueryResponse> Handle(GetEmployeeSavingInfoQuery request,
             CancellationToken cancellationToken)
         {
             var employee = await GetEmployee(request.IsCreate, request.Login);
             var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
             var employees = await _employeeService.GetAll().ConfigureAwait(false);
 
-            return new EmployeeSavingInfoQueryResponse
+            return new GetEmployeeSavingInfoQueryResponse
             {
                 Employee = Mapper.Map<EmployeeDto>(employee),
                 Attributes =  Mapper.Map<ICollection<AttributeInfoDto>>(attributes.ToArray()),
@@ -42,7 +42,7 @@ namespace HRSystem.Queries.EmployeeSavingInfo
             };
         }
 
-        public Task<Employee> GetEmployee(bool isCreate, string login)
+        private Task<Employee> GetEmployee(bool isCreate, string login)
         {
             if (!isCreate)
             {

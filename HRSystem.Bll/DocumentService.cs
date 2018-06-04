@@ -12,7 +12,7 @@ namespace HRSystem.Bll
 {
     public class DocumentService : IDocumentService
     {
-        private static readonly object lockObject = new object();
+        private static readonly object LockObject = new object();
         
         public void Save(Employee employee, AttributeInfo attributeInfo, Document document)
         {
@@ -23,7 +23,7 @@ namespace HRSystem.Bll
             }
 
             var path = $"{attributeDirectory}/{employee.Login}{Path.GetExtension(document.Name)}";
-            lock (lockObject)
+            lock (LockObject)
             {
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
@@ -35,15 +35,11 @@ namespace HRSystem.Bll
         public Document Load(Employee employee, AttributeInfo attributeInfo)
         {
             var path = GetPath(employee, attributeInfo);
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new InvalidOperationException($"File '{employee.Login}\\{attributeInfo.Name}' not found.");
-            }
 
             byte[] content;
-            lock (lockObject)
+            lock (LockObject)
             {
-                content = System.IO.File.ReadAllBytes(path);
+                content = File.ReadAllBytes(path);
             }
             
             return new Document(Path.GetFileName(path), content);
@@ -85,14 +81,14 @@ namespace HRSystem.Bll
         public void Delete(Employee employee, AttributeInfo attributeInfo)
         {
             var path = GetPath(employee, attributeInfo);
-            if (!System.IO.File.Exists(path))
+            if (!File.Exists(path))
             {
                 throw new InvalidOperationException("File not found.");
             }
 
-            lock (lockObject)
+            lock (LockObject)
             {
-                System.IO.File.Delete(path);
+                File.Delete(path);
             }
         }
     }

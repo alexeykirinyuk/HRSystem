@@ -5,6 +5,7 @@ using System.Text;
 using HRSystem.ActiveDirectory.Dal.Services.Interfaces;
 using HRSystem.Domain;
 using LiteGuard;
+using static HRSystem.ActiveDirectory.ActiveDirectoryConstants;
 
 namespace HRSystem.ActiveDirectory.Dal.Services
 {
@@ -26,26 +27,25 @@ namespace HRSystem.ActiveDirectory.Dal.Services
         {
             var list = new List<DirectoryAttribute>
             {
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Name, account.FullName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.DisplayName, account.FullName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.AccountName, account.Login),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.FirstName, account.FirstName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.LastName, account.LastName),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Type, ActiveDirectoryConstants.Entities.User),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Email, account.Email),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Job, account.JobTitle),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Office, account.Office),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Phone, account.Phone),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserAccountControl, ActiveDirectoryConstants.EntityAttributes.UserAccountControlValue),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserPrincipalName, $"{account.Login}@{_settings.Domain}"),
-                new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.UserMustChangePassword,
-                    ActiveDirectoryConstants.EntityAttributes.UserNotMustChangePasswordValue),
-//                new DirectoryAttribute(EntityAttributes.Password, GetFormattedPasswordAsBytes(password))
+                new DirectoryAttribute(EntityAttributes.Name, account.FullName),
+                new DirectoryAttribute(EntityAttributes.DisplayName, account.FullName),
+                new DirectoryAttribute(EntityAttributes.AccountName, account.Login),
+                new DirectoryAttribute(EntityAttributes.FirstName, account.FirstName),
+                new DirectoryAttribute(EntityAttributes.LastName, account.LastName),
+                new DirectoryAttribute(EntityAttributes.Type, Entities.User),
+                new DirectoryAttribute(EntityAttributes.Email, account.Email),
+                new DirectoryAttribute(EntityAttributes.Job, account.JobTitle),
+                new DirectoryAttribute(EntityAttributes.Office, account.Office),
+                new DirectoryAttribute(EntityAttributes.Phone, account.Phone),
+                new DirectoryAttribute(EntityAttributes.UserAccountControl, EntityAttributes.UserAccountControlValue),
+                new DirectoryAttribute(EntityAttributes.UserPrincipalName, $"{account.Login}@{_settings.Domain}"),
+                new DirectoryAttribute(EntityAttributes.UserMustChangePassword,
+                    EntityAttributes.UserNotMustChangePasswordValue),
             };
 
             if (!string.IsNullOrEmpty(account.ManagerDistinguishedName))
             {
-                list.Add(new DirectoryAttribute(ActiveDirectoryConstants.EntityAttributes.Manager, account.ManagerDistinguishedName));
+                list.Add(new DirectoryAttribute(EntityAttributes.Manager, account.ManagerDistinguishedName));
             }
 
             return list;

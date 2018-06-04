@@ -13,7 +13,6 @@ using HRSystem.Composition;
 using HRSystem.Core;
 using HRSystem.Data;
 using HRSystem.Infrastructure;
-using HRSystem.Queries.AttributeSavingInfo;
 using HRSystem.Queries.GetEmployees;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

@@ -82,7 +82,6 @@
     <Compile Include="Services\ActiveDirectoryUserUpdatingInfoBuilderService.cs" />
     <Compile Include="Services\Interfaces\IActiveDirectoryUserUpdatingInfoBuilderService.cs" />
     <Compile Include="Services\Interfaces\IActiveDirectoryUserCreationInfoBuilderService.cs" />
-    <Compile Include="SharePointEntitiesConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRSystem.ActiveDirectory\HRSystem.ActiveDirectory.csproj">

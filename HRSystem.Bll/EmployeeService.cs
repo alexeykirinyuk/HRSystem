@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using HRSystem.Bll.Extensions;
 using HRSystem.Common.Errors;
 using HRSystem.Core;
@@ -10,6 +11,7 @@ using HRSystem.Domain;
 using HRSystem.Domain.Attributes;
 using HRSystem.Domain.Attributes.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace HRSystem.Bll
 {
@@ -60,7 +62,7 @@ namespace HRSystem.Bll
             return WithDocuments(employeeQueryable);
         }
 
-        private Employee[] WithDocuments(Employee[] employeeArray)
+        private IEnumerable<Employee> WithDocuments(Employee[] employeeArray)
         {
             var documentAttributeInfos = _db.AttributeInfos
                 .Where(a => a.Type == AttributeType.Document);
@@ -94,11 +96,6 @@ namespace HRSystem.Bll
             await _db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<AttributeInfo>> GetAttributes()
-        {
-            return await _db.AttributeInfos.ToArrayAsync().ConfigureAwait(false);
-        }
-
         public Task<bool> IsExists(string login)
         {
             return _db.Employees.AnyAsync(e => e.Login == login);
@@ -122,28 +119,22 @@ namespace HRSystem.Bll
 
         public async Task SyncWithActiveDirectory(DateTime fromDate)
         {
-            var employeesLastUpdated = GetEmployeesUpdatedBetweenDates(fromDate).ToArray();
+            var employeesLastUpdated = await _db.Employees.GetEmployeesUpdatedFrom(fromDate).IncludeAll().ToArrayAsync();
             var usersLastUpdated = _accountService.GetUsersUpdatedFrom(fromDate).ToArray();
 
             SyncEmployeesToUsers(employeesLastUpdated);
             await SyncUsersToEmployees(usersLastUpdated, employeesLastUpdated);
         }
 
-        private IQueryable<Employee> GetEmployeesUpdatedBetweenDates(DateTime @from)
+        private void SyncEmployeesToUsers(IEnumerable<Employee> lastUpdatedEmployees)
         {
-            return _db.Employees.Where(e => e.LastModified > from)
-                .Include(e => e.Manager)
-                .Include(e => e.Attributes);
-        }
-
-        private void SyncEmployeesToUsers(IEnumerable<Employee> employeesLastUpdated)
-        {
-            foreach (var lastUpdatedEmployee in employeesLastUpdated)
+            var lastUpdatedEmployeeArray = lastUpdatedEmployees as Employee[] ?? lastUpdatedEmployees.ToArray();
+            foreach (var lastUpdatedEmployee in lastUpdatedEmployeeArray)
             {
                 var user = _accountService.GetByLogin(lastUpdatedEmployee.Login);
                 if (user == null)
                 {
-                    CreateUser(lastUpdatedEmployee, employeesLastUpdated);
+                    CreateUser(lastUpdatedEmployee, lastUpdatedEmployeeArray);
                 }
                 else
                 {
@@ -153,7 +144,7 @@ namespace HRSystem.Bll
                         manager = _accountService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
                     }
 
-                    _accountService.Update(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+                    _accountService.Update(lastUpdatedEmployee.ToAccount(manager?.DistinguishedName));
                 }
             }
         }
@@ -175,7 +166,7 @@ namespace HRSystem.Bll
                 manager = _accountService.GetByLogin(lastUpdatedEmployee.ManagerLogin);
             }
 
-            _accountService.Create(lastUpdatedEmployee.ToUser(manager?.DistinguishedName));
+            _accountService.Create(lastUpdatedEmployee.ToAccount(manager?.DistinguishedName));
         }
 
         private async Task SyncUsersToEmployees(IEnumerable<Account> usersLastUpdated,
