@@ -27,24 +27,41 @@ namespace HRSystem.Queries.GetEmployees
             _attributeInfoService = attributeInfoService;
         }
 
-        public async Task<GetEmployeesQueryResponse> Handle(GetEmployeesQuery request, CancellationToken cancellationToken)
+        public async Task<GetEmployeesQueryResponse> Handle(GetEmployeesQuery request,
+            CancellationToken cancellationToken)
         {
             IEnumerable<Employee> employeeEnumerable;
-            if (!string.IsNullOrEmpty(request.SearchFilter))
+            if (!string.IsNullOrEmpty(request.AllAttributesFilter) ||
+                !string.IsNullOrEmpty(request.ManagerFullNameFilter) || 
+                !string.IsNullOrEmpty(request.OfficeFilter) ||
+                !string.IsNullOrEmpty(request.JobTitleFilter) ||
+                !string.IsNullOrEmpty(request.AllAttributesFilter) ||
+                request.AttributeFilters.Any())
             {
-                employeeEnumerable = await _employeeService.Search(request.SearchFilter);
+                employeeEnumerable = await _employeeService.Search(
+                    request.ManagerFullNameFilter,
+                    request.OfficeFilter,
+                    request.JobTitleFilter,
+                    request.AllAttributesFilter,
+                    request.AttributeFilters);
             }
             else
             {
                 employeeEnumerable = await _employeeService.GetAll();
             }
-            
+
             var attributes = await _attributeInfoService.GetAll().ConfigureAwait(false);
+            var jobTitles = await _employeeService.GetJobTitles().ConfigureAwait(false);
+            var managers = await _employeeService.GetManagers().ConfigureAwait(false);
+            var offices = await _employeeService.GetOffices().ConfigureAwait(false);
 
             return new GetEmployeesQueryResponse
             {
                 Employees = Mapper.Map<ICollection<EmployeeDto>>(employeeEnumerable.ToArray()),
-                Attributes = Mapper.Map<ICollection<AttributeInfoDto>>(attributes.ToArray())
+                Attributes = Mapper.Map<ICollection<AttributeInfoDto>>(attributes.ToArray()),
+                JobTitles = jobTitles.ToArray(),
+                ManagerNames = managers.ToArray(),
+                Offices = offices.ToArray()
             };
         }
     }

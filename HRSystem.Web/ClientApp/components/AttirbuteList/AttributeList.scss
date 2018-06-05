@@ -1,0 +1,26 @@
+.attributeList {
+  .attributeListInner {
+    margin: 20px;
+
+    .commandBlock {
+      background-color: gainsboro;
+      width: 50%;
+      border-radius: 10px;
+      display: flex;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border: solid 1px black;
+
+      .commandBlockInner {
+        margin: 20px;
+      }
+    }
+  }
+
+  button {
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    vertical-align: center;
+  }
+}

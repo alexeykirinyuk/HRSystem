@@ -6,6 +6,7 @@ export class RequestUrls {
     private static readonly ATTRIBUTE = "attribute";
     private static readonly DOCUMENT = "document";
 
+    public static readonly GET_EMPLOYEE_SEARCH_INFO = `${RequestUrls.API}/${RequestUrls.EMPLOYEE}/searchInfo`;
     public static readonly GET_ALL_EMPLOYEES = `${RequestUrls.API}/${RequestUrls.EMPLOYEE}/all`;
     public static readonly GET_EMPLOYEE_CREATION_INFO = `${RequestUrls.API}/${RequestUrls.EMPLOYEE}/creationInfo`;
     public static readonly SAVE_EMPLOYEE = `${RequestUrls.API}/${RequestUrls.EMPLOYEE}/save`;

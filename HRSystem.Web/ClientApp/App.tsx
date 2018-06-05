@@ -28,12 +28,12 @@ export const App = () =>
             <Nav>
                 <LinkContainer to="/list">
                     <NavItem eventKey={1}>
-                        Employee List
+                        EMPLOYEES
                     </NavItem>
                 </LinkContainer>
                 <LinkContainer to="/attributes">
                     <NavItem eventKey={2}>
-                        Attribute List
+                        ATTRIBUTES
                     </NavItem>
                 </LinkContainer>
             </Nav>

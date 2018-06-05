@@ -8,5 +8,11 @@ namespace HRSystem.Queries.GetEmployees
         public ICollection<EmployeeDto> Employees { get; set; }
         
         public ICollection<AttributeInfoDto> Attributes { get; set; }
+        
+        public ICollection<string> ManagerNames { get; set; }
+        
+        public ICollection<string> Offices { get; set; }
+        
+        public ICollection<string> JobTitles { get; set; }
     }
 }

@@ -1,27 +1,55 @@
 import {
-    ISaveEmployeeParams,
+    AddEmployeeParams,
     EmployeeSavingInfoResponse,
+    GetAllEmployeesResponse,
     IEmployeeService,
-    GetAllEmployeesResponse, AddEmployeeParams
+    ISaveEmployeeParams
 } from "../core/IEmployeeService";
-import { IDataService } from "../core/IDataService";
-import { RequestUrls } from "./RequestUrls";
-import { StringHelper } from "../helpers/StringHelper";
-import { AttributeType } from "../models/AttributeType";
+import {IDataService} from "../core/IDataService";
+import {RequestUrls} from "./RequestUrls";
+import {StringHelper} from "../helpers/StringHelper";
+import {AttributeType} from "../models/AttributeType";
 
 export class EmployeeService implements IEmployeeService {
     constructor(private dataService: IDataService) {
 
     }
 
-    public async getAll(search?: string): Promise<GetAllEmployeesResponse> {
-        let postfix = StringHelper.isNullOrEmpty(search) ?
-            "" :
-            `?search=${search}`;
+    public async getAll(
+        manager: string,
+        office: string,
+        jobTitle: string,
+        allAttributes: string,
+        attributes: Map<number, string>): Promise<GetAllEmployeesResponse> {
+        let query = this.buildQuery(manager, office, jobTitle, allAttributes, attributes);
 
         let response = await this.dataService.makeGetRequest<GetAllEmployeesResponse>(
-            `${RequestUrls.GET_ALL_EMPLOYEES}${postfix}`);
+            `${RequestUrls.GET_ALL_EMPLOYEES}${query}`);
         return new GetAllEmployeesResponse(response);
+    }
+
+    private buildQuery(manager: string, office: string, jobTitle: string, allAttributes: string, attributes: Map<number, string>) {
+        let parameters: string[] = [];
+        if (!StringHelper.isNullOrEmpty(manager)) {
+            parameters.push(`manager=${manager}`);
+        }
+        if (!StringHelper.isNullOrEmpty(office)) {
+            parameters.push(`office=${office}`);
+        }
+        if (!StringHelper.isNullOrEmpty(jobTitle)) {
+            parameters.push(`jobTitle=${jobTitle}`);
+        }
+        if (!StringHelper.isNullOrEmpty(allAttributes)) {
+            parameters.push(`allAttributes=${allAttributes}`)
+        }
+        for (let key of attributes.keys()) {
+            parameters.push(`${key}=${attributes.get(key)}`);
+        }
+        if (parameters.length == 0) {
+            return StringHelper.EMPTY;
+        }
+
+        return `?${parameters.join("&")}`;
     }
 
     public async getEmployeeSavingInfo(login: string, isCreate: boolean): Promise<EmployeeSavingInfoResponse> {
@@ -53,7 +81,7 @@ export class EmployeeService implements IEmployeeService {
         request.send(data);
     }
 
-    deleteDocument(employeeLogin: string, attributeInfoId: number): Promise<void> {
+    public deleteDocument(employeeLogin: string, attributeInfoId: number): Promise<void> {
         return this.dataService.makeDeleteRequest(`${RequestUrls.DELETE_DOCUMENT}/${employeeLogin}/${attributeInfoId}`);
     }
 }

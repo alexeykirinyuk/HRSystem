@@ -10,12 +10,6 @@ namespace HRSystem.Domain.Attributes
         {
         }
 
-        public IntAttribute(Employee employee, AttributeInfo attributeInfo, int? value) :
-            base(employee, attributeInfo)
-        {
-            Value = value;
-        }
-
         public override string GetValueAsString()
         {
             return Value?.ToString() ?? string.Empty;

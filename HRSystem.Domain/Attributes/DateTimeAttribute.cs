@@ -14,12 +14,6 @@ namespace HRSystem.Domain.Attributes
         {
         }
 
-        public DateTimeAttribute(Employee employee, AttributeInfo attributeInfo, DateTime? value) : base(employee,
-            attributeInfo)
-        {
-            Value = value;
-        }
-
         public override string GetValueAsString()
         {
             return Value?.ToString(DateTimeFormat) ?? string.Empty;

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using HRSystem.Commands.SaveEmployee;
 using HRSystem.Common.Errors;
 using HRSystem.Common.Validation;
@@ -22,11 +24,21 @@ namespace HRSystem.Web.Controllers
         }
 
         [HttpGet("all")]
-        public Task<GetEmployeesQueryResponse> GetEmployees(string search = null)
+        public Task<GetEmployeesQueryResponse> GetEmployees()
         {
+            var queryParameters = Request.Query.ToDictionary(q => q.Key, q => q.Value);
+            
             return _mediator.Send(new GetEmployeesQuery
             {
-                SearchFilter = search
+                ManagerFullNameFilter = queryParameters.GetValueOrDefault("manager"),
+                OfficeFilter = queryParameters.GetValueOrDefault("office"),
+                JobTitleFilter = queryParameters.GetValueOrDefault("jobTitle"),
+                AllAttributesFilter = queryParameters.GetValueOrDefault("allAttributes"),
+                AttributeFilters = queryParameters.Where(q => q.Key != "manager" &&
+                                                              q.Key != "office" &&
+                                                              q.Key != "jobTitle" &&
+                                                              q.Key != "allAttributes")
+                    .ToDictionary(q => int.Parse(q.Key), q => q.Value.ToString())
             });
         }
 

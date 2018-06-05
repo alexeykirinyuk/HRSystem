@@ -2,7 +2,6 @@ import {ISaveEmployeeProps} from "./ISaveEmployeeProps";
 import {ISaveEmployeeState} from "./ISaveEmployeeState";
 import * as React from "react";
 import {Alert, Button, ControlLabel, FormControl, FormGroup, Modal} from "react-bootstrap";
-import {AttributeType} from "../../models/AttributeType";
 import {AttributeInfo} from "../../models/AttributeInfo";
 import {StringHelper} from "../../helpers/StringHelper";
 import {EventHelper} from "../../helpers/EventHelper";

@@ -43,23 +43,45 @@ namespace HRSystem.Bll
             return WithDocuments(employeeArray);
         }
 
-        public async Task<IEnumerable<Employee>> Search(string searchFilter)
+        public async Task<IEnumerable<Employee>> Search(
+            string managerFullName,
+            string office,
+            string jobTitle,
+            string allAttributes,
+            Dictionary<int, string> attributeFilters)
         {
-            var employeeQueryable = await _db.Employees
-                .Where(e => e.Login.Contains(searchFilter) ||
-                            e.FullName.Contains(searchFilter) ||
-                            e.Email != null && e.Email.Contains(searchFilter) ||
-                            e.JobTitle != null && e.JobTitle.Contains(searchFilter) ||
-                            e.Phone != null && e.Phone.Contains(searchFilter) ||
-                            e.Office != null && e.Office.Contains(searchFilter) ||
-                            e.Manager != null && e.Manager.FullName.Contains(searchFilter) ||
-                            e.Attributes.Any(a => a.GetValueAsString().Contains(searchFilter)))
-                .Include(e => e.Manager)
-                .Include(e => e.Attributes)
+            var employees = _db.Employees.AsQueryable();
+            if (!string.IsNullOrEmpty(allAttributes))
+            {
+                employees = employees.Search(allAttributes);
+            }
+
+            if (!string.IsNullOrEmpty(managerFullName))
+            {
+                employees = employees.SearchByManager(managerFullName);
+            }
+
+            if (!string.IsNullOrEmpty(office))
+            {
+                employees = employees.SearchByOffice(office);
+            }
+
+            if (!string.IsNullOrEmpty(jobTitle))
+            {
+                employees = employees.SearchByJobTitle(jobTitle);
+            }
+
+            foreach (var attributeFilter in attributeFilters)
+            {
+                employees = employees.SearchByAttribute(attributeFilter.Key, attributeFilter.Value);
+            }
+
+            var employeeArray = await employees
+                .IncludeAll()
                 .ToArrayAsync()
                 .ConfigureAwait(false);
 
-            return WithDocuments(employeeQueryable);
+            return WithDocuments(employeeArray);
         }
 
         private IEnumerable<Employee> WithDocuments(Employee[] employeeArray)
@@ -119,11 +141,40 @@ namespace HRSystem.Bll
 
         public async Task SyncWithActiveDirectory(DateTime fromDate)
         {
-            var employeesLastUpdated = await _db.Employees.GetEmployeesUpdatedFrom(fromDate).IncludeAll().ToArrayAsync();
+            var employeesLastUpdated =
+                await _db.Employees.GetEmployeesUpdatedFrom(fromDate).IncludeAll().ToArrayAsync();
             var usersLastUpdated = _accountService.GetUsersUpdatedFrom(fromDate).ToArray();
 
             SyncEmployeesToUsers(employeesLastUpdated);
             await SyncUsersToEmployees(usersLastUpdated, employeesLastUpdated);
+        }
+
+        public async Task<IEnumerable<string>> GetOffices()
+        {
+            return await _db.Employees
+                .Select(e => e.Office)
+                .Distinct()
+                .ToArrayAsync()
+                .ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<string>> GetJobTitles()
+        {
+            return await _db.Employees
+                .Select(e => e.JobTitle)
+                .Distinct()
+                .ToArrayAsync()
+                .ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<string>> GetManagers()
+        {
+            return await _db.Employees
+                .Where(e => e.Manager != null)
+                .Select(e => e.Manager.FullName)
+                .Distinct()
+                .ToArrayAsync()
+                .ConfigureAwait(false);
         }
 
         private void SyncEmployeesToUsers(IEnumerable<Employee> lastUpdatedEmployees)

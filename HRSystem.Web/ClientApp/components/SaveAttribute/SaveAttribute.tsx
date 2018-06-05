@@ -1,13 +1,13 @@
 import * as React from "react";
-import { ISaveAttributeProps } from "./ISaveAttributeProps";
-import { ISaveAttributeState } from "./ISaveAttributeState";
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Modal } from "react-bootstrap";
-import { EventHelper } from "../../helpers/EventHelper";
-import { StringHelper } from "../../helpers/StringHelper";
-import { AttributeType, AttributeTypeHelper } from "../../models/AttributeType";
-import Select, { Option } from "react-select";
-import { Spinner } from "../Spinner/Spinner";
-import { ValidationErrors } from "../../models/ValidationErrors";
+import {ISaveAttributeProps} from "./ISaveAttributeProps";
+import {ISaveAttributeState} from "./ISaveAttributeState";
+import {Alert, Button, ControlLabel, FormControl, FormGroup, Modal} from "react-bootstrap";
+import {EventHelper} from "../../helpers/EventHelper";
+import {StringHelper} from "../../helpers/StringHelper";
+import {AttributeType, AttributeTypeHelper} from "../../models/AttributeType";
+import Select, {Option} from "react-select";
+import {Spinner} from "../Spinner/Spinner";
+import {ValidationErrors} from "../../models/ValidationErrors";
 
 export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAttributeState> {
     public constructor(props: ISaveAttributeProps) {
@@ -18,18 +18,34 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
 
     public render(): React.ReactElement<ISaveAttributeProps> {
         return (<Modal show={this.state.show} onHide={() => this.hide()}
-            onEscapeKeyUp={() => this.hide()}>
+                       onEscapeKeyUp={() => this.hide()}>
             <Modal.Header>
-                <Modal.Title>Create attribute</Modal.Title>
+                <Modal.Title>
+                    {
+                        this.state.id == null ?
+                            "CREATE NEW" :
+                            `${this.state.name.toUpperCase()} ATTRIBUTE`
+                    }
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Alert bsStyle="danger" hidden={this.state.validationErrors.length == 0}>
+                <Alert
+                    bsStyle="danger"
+                    hidden={this.state.validationErrors.length == 0}
+                >
                     <ul>
-                        {this.state.validationErrors.map(e => <li>{e.message}</li>)}
+                        {
+                            this.state.validationErrors.map(e =>
+                                <li>
+                                    {e.message}
+                                </li>)
+                        }
                     </ul>
                 </Alert>
                 <div>
-                    <div hidden={!this.state.isLoading}>
+                    <div
+                        hidden={!this.state.isLoading}
+                    >
                         <Spinner/>
                     </div>
                     <div hidden={this.state.isLoading}>
@@ -70,7 +86,7 @@ export class SaveAttribute extends React.Component<ISaveAttributeProps, ISaveAtt
         if (props.show && !this.state.show) {
             this.componentDidMountAsync(props.id).then();
         }
-        this.setState({ id: props.id, show: props.show });
+        this.setState({id: props.id, show: props.show});
     }
 
     public componentDidMount(): void {

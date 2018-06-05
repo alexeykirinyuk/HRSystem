@@ -1,10 +1,11 @@
 import {AttributeBase} from "./AttributeBase";
 import {IEmployee} from "../core/IEmployee";
-import { StringHelper } from "../helpers/StringHelper";
-import { AttributeInfo } from "./AttributeInfo";
+import {StringHelper} from "../helpers/StringHelper";
+import {AttributeInfo} from "./AttributeInfo";
 
 export class Employee implements IEmployee {
     public login: string;
+
     public get fullName(): string {
         return `${this.firstName} ${this.lastName}`;
     }
@@ -16,6 +17,7 @@ export class Employee implements IEmployee {
     public jobTitle: string;
     public office: string;
     public manager: Employee;
+
     public get managerLogin(): string {
         if (this.manager != null) {
             return this.manager.login;
@@ -23,6 +25,7 @@ export class Employee implements IEmployee {
 
         return "";
     }
+
     public get managerName(): string {
         if (this.manager != null) {
             return this.manager.fullName;
@@ -48,6 +51,8 @@ export class Employee implements IEmployee {
         if (employee.manager != null) {
             this.manager = new Employee(employee.manager);
         }
-        this.attributes = employee.attributes.map(a => new AttributeBase(a));
+        if (employee.attributes != null) {
+            this.attributes = employee.attributes.map(a => new AttributeBase(a));
+        }
     }
 }

@@ -1,12 +1,15 @@
-import { Employee } from "../models/Employee";
-import { AttributeInfo } from "../models/AttributeInfo";
-import { AttributeType } from "../models/AttributeType";
-import { StringHelper } from "../helpers/StringHelper";
+import {Employee} from "../models/Employee";
+import {AttributeInfo} from "../models/AttributeInfo";
+import {AttributeType} from "../models/AttributeType";
+import {StringHelper} from "../helpers/StringHelper";
 
 
 export class GetAllEmployeesResponse {
-    employees: Array<Employee>;
-    attributes: Array<AttributeInfo>;
+    public employees: Array<Employee>;
+    public attributes: Array<AttributeInfo>;
+    public managerNames: Array<string>;
+    public offices: Array<string>;
+    public jobTitles: Array<string>;
 
     public constructor(response?: GetAllEmployeesResponse) {
         if (response == null) {
@@ -15,6 +18,9 @@ export class GetAllEmployeesResponse {
 
         this.employees = response.employees.map(e => new Employee(e));
         this.attributes = response.attributes.map(a => new AttributeInfo(a));
+        this.managerNames = response.managerNames;
+        this.offices = response.offices;
+        this.jobTitles = response.jobTitles;
     }
 }
 
@@ -105,7 +111,12 @@ export interface IEmployeeAttribute {
 }
 
 export interface IEmployeeService {
-    getAll(search?: string): Promise<GetAllEmployeesResponse>;
+    getAll(
+        manager: string,
+        office: string,
+        jobTitle: string,
+        allAttributes: string,
+        attributes: Map<number, string>): Promise<GetAllEmployeesResponse>;
 
     getEmployeeSavingInfo(login: string, isCreate: boolean): Promise<EmployeeSavingInfoResponse>;
 
